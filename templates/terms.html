@@ -1,0 +1,474 @@
+{% extends "base.html" %} {% block title %}Terms of Service - ProfileMint{%
+endblock %} {% block content %}
+
+<style>
+  /* terms.html */
+  .card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+  }
+
+  .text-mint {
+    color: #64ffda !important;
+  }
+
+  .list-group-item {
+    background: transparent;
+    border: none;
+    padding-left: 0;
+    margin-bottom: 8px;
+  }
+
+  .alert-warning {
+    background: linear-gradient(145deg, #fff3cd, #ffecb5);
+    border: none;
+    border-radius: 12px;
+  }
+
+  .table {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .table th {
+    background: linear-gradient(145deg, #0a192f, #1a2b47);
+    color: white;
+    font-weight: 600;
+  }
+
+  .btn-mint {
+    background: linear-gradient(145deg, #0a192f, #64ffda);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+  }
+
+  .acceptance-section {
+    border-top: 2px solid #64ffda;
+  }
+</style>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-5">
+            <div class="mb-3">
+              <i class="fas fa-file-contract fa-3x text-mint"></i>
+            </div>
+            <h1 class="h2 fw-bold mb-2">Terms of Service</h1>
+            <p class="text-muted">
+              Last updated: <span id="currentYear">{{ current_year }}</span>
+            </p>
+            <div class="alert alert-info mt-3">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              Please read these Terms of Service carefully before using our
+              website.
+            </div>
+          </div>
+
+          <div class="terms-content">
+            <div class="acceptance-alert mb-5">
+              <div class="alert alert-warning">
+                <h5 class="alert-heading">
+                  <i class="fas fa-exclamation-triangle me-2"></i>Important
+                  Notice
+                </h5>
+                <p class="mb-0">
+                  By accessing or using ProfileMint, you agree to be bound by
+                  these Terms of Service and our Privacy Policy. If you disagree
+                  with any part of the terms, you may not access our services.
+                </p>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-user-plus text-mint"></i
+                ></span>
+                <span>1. Account Registration</span>
+              </h2>
+              <p>To use our services, you must:</p>
+              <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Be at least 16 years of age
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Provide accurate, current, and complete information during
+                  registration
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Maintain the security of your password and accept all risks of
+                  unauthorized access
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Not create accounts for others without their permission
+                </li>
+              </ul>
+              <div class="card bg-light mt-3">
+                <div class="card-body">
+                  <h6 class="card-title">
+                    <i class="fas fa-lightbulb text-warning me-2"></i>Best
+                    Practices
+                  </h6>
+                  <ul class="mb-0">
+                    <li>
+                      Use a strong, unique password for your ProfileMint account
+                    </li>
+                    <li>Enable two-factor authentication if available</li>
+                    <li>Never share your login credentials with others</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-credit-card text-mint"></i
+                ></span>
+                <span>2. Subscription and Payments</span>
+              </h2>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Subscription Type</th>
+                      <th>Billing Cycle</th>
+                      <th>Auto-Renewal</th>
+                      <th>Cancellation Policy</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Monthly</td>
+                      <td>Every 30 days</td>
+                      <td>Yes</td>
+                      <td>Cancel anytime before next billing cycle</td>
+                    </tr>
+                    <tr>
+                      <td>Annual</td>
+                      <td>Every 365 days</td>
+                      <td>Yes</td>
+                      <td>Cancel within 14 days for full refund</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle me-2"></i>
+                All fees are exclusive of applicable taxes, which will be added
+                to your payment.
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-ban text-mint"></i></span>
+                <span>3. Prohibited Activities</span>
+              </h2>
+              <p>
+                You agree not to engage in any of the following prohibited
+                activities:
+              </p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h6 class="card-title text-danger">
+                        <i class="fas fa-times-circle me-2"></i>Content
+                        Violations
+                      </h6>
+                      <ul class="mb-0">
+                        <li>
+                          Copying or distributing resume templates without
+                          authorization
+                        </li>
+                        <li>
+                          Creating fake or misleading professional profiles
+                        </li>
+                        <li>
+                          Uploading content that infringes on intellectual
+                          property rights
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h6 class="card-title text-danger">
+                        <i class="fas fa-times-circle me-2"></i>System Abuse
+                      </h6>
+                      <ul class="mb-0">
+                        <li>
+                          Attempting to interfere with the proper functioning of
+                          our services
+                        </li>
+                        <li>
+                          Creating multiple accounts to exploit free trials
+                        </li>
+                        <li>Using automated systems to access our services</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-gavel text-mint"></i></span>
+                <span>4. Intellectual Property Rights</span>
+              </h2>
+              <div class="d-flex">
+                <div class="flex-shrink-0">
+                  <i class="fas fa-copyright fa-2x text-muted"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <p>
+                    ProfileMint retains all rights to the website, services, and
+                    all associated content. You retain all rights to the
+                    personal information and content you upload to our service.
+                  </p>
+                  <p>
+                    By uploading content, you grant ProfileMint a worldwide,
+                    non-exclusive, royalty-free license to use, store, and
+                    display that content solely for the purpose of providing our
+                    services to you.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-times-hexagon text-mint"></i
+                ></span>
+                <span>5. Termination</span>
+              </h2>
+              <p>
+                We may terminate or suspend your account immediately, without
+                prior notice or liability, for any reason whatsoever, including
+                without limitation if you breach the Terms.
+              </p>
+              <p>
+                Upon termination, your right to use the service will immediately
+                cease. If you wish to terminate your account, you may simply
+                discontinue using the service or contact us to delete your
+                account.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-exclamation-triangle text-mint"></i
+                ></span>
+                <span>6. Disclaimer of Warranties</span>
+              </h2>
+              <div class="alert alert-warning">
+                <p>
+                  Our service is provided on an "AS IS" and "AS AVAILABLE"
+                  basis. ProfileMint makes no representations or warranties of
+                  any kind, express or implied, as to the operation of our
+                  services, or the information, content, or materials included
+                  therein.
+                </p>
+                <p class="mb-0">
+                  You expressly agree that your use of our service is at your
+                  sole risk. We do not guarantee that the service will meet your
+                  requirements, or that the service will be uninterrupted,
+                  timely, secure, or error-free.
+                </p>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-balance-scale text-mint"></i
+                ></span>
+                <span>7. Limitation of Liability</span>
+              </h2>
+              <p>
+                In no event shall ProfileMint, nor its directors, employees,
+                partners, agents, suppliers, or affiliates, be liable for any
+                indirect, incidental, special, consequential or punitive
+                damages, including without limitation, loss of profits, data,
+                use, goodwill, or other intangible losses, resulting from:
+              </p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-angle-right text-mint me-2"></i>
+                  Your access to or use of or inability to access or use the
+                  service
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-angle-right text-mint me-2"></i>
+                  Any conduct or content of any third party on the service
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-angle-right text-mint me-2"></i>
+                  Any content obtained from the service
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-angle-right text-mint me-2"></i>
+                  Unauthorized access, use or alteration of your transmissions
+                  or content
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-flag text-mint"></i></span>
+                <span>8. Governing Law</span>
+              </h2>
+              <p>
+                These Terms shall be governed and construed in accordance with
+                the laws of the State of Delaware, United States, without regard
+                to its conflict of law provisions.
+              </p>
+              <p>
+                Our failure to enforce any right or provision of these Terms
+                will not be considered a waiver of those rights. If any
+                provision of these Terms is held to be invalid or unenforceable
+                by a court, the remaining provisions of these Terms will remain
+                in effect.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-pencil-alt text-mint"></i
+                ></span>
+                <span>9. Changes to Terms</span>
+              </h2>
+              <p>
+                We reserve the right, at our sole discretion, to modify or
+                replace these Terms at any time. If a revision is material we
+                will provide at least 30 days' notice prior to any new terms
+                taking effect. What constitutes a material change will be
+                determined at our sole discretion.
+              </p>
+              <p>
+                By continuing to access or use our service after those revisions
+                become effective, you agree to be bound by the revised terms.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-envelope text-mint"></i
+                ></span>
+                <span>10. Contact Information</span>
+              </h2>
+              <p>
+                If you have any questions about these Terms, please contact us
+                at:
+              </p>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                      <i class="fas fa-envelope text-mint me-2"></i>
+                      <strong>Email:</strong> legal@profilemint.com
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-map-marker-alt text-mint me-2"></i>
+                      <strong>Address:</strong> 123 Legal Lane, Terms City, TC
+                      10101
+                    </li>
+                    <li>
+                      <i class="fas fa-phone text-mint me-2"></i>
+                      <strong>Phone:</strong> +1 (555) 123-LEGAL
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="acceptance-section mt-5 pt-4 border-top">
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="termsAgreement"
+                />
+                <label class="form-check-label" for="termsAgreement">
+                  I have read, understood, and agree to be bound by these Terms
+                  of Service
+                </label>
+              </div>
+              <div class="d-flex justify-content-between">
+                <button
+                  class="btn btn-outline-secondary"
+                  onclick="window.print()"
+                >
+                  <i class="fas fa-print me-1"></i> Print Terms
+                </button>
+                <button class="btn btn-mint" id="agreeButton" disabled>
+                  <i class="fas fa-check-circle me-1"></i> I Agree to Terms
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set current year
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+  // Enable agree button when checkbox is checked
+  document
+    .getElementById("termsAgreement")
+    .addEventListener("change", function () {
+      document.getElementById("agreeButton").disabled = !this.checked;
+    });
+
+  // Agree button functionality
+  document.getElementById("agreeButton").addEventListener("click", function () {
+    // In a real implementation, this would set a cookie or update user preferences
+    alert("Thank you for accepting our Terms of Service!");
+    this.disabled = true;
+    this.innerHTML = '<i class="fas fa-check me-1"></i> Terms Accepted';
+    this.classList.remove("btn-mint");
+    this.classList.add("btn-success");
+  });
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+</script>
+{% endblock %}

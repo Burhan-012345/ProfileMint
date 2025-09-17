@@ -1,0 +1,972 @@
+{% extends "base.html" %} {% block title %}Edit Resume - ProfileMint{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between mb-4">
+    <a href="{{ url_for('my_resumes') }}" class="btn btn-outline-navy">
+      <i class="fas fa-arrow-left me-2"></i> Back to Resumes
+    </a>
+    <form action="{{ url_for('download_resume', resume_id=resume.id) }}" method="POST">
+      <input type="hidden" name="format" value="pdf" />
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <button type="submit" class="btn btn-outline-success">
+        <i class="fas fa-download me-2" aria-hidden="true"></i> Download PDF
+      </button>
+    </form>
+  </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2 fw-bold mb-1">Edit Resume</h1>
+      <p class="text-muted mb-0">Update your resume information</p>
+    </div>
+  </div>
+
+  <form
+    method="POST"
+    action="{{ url_for('edit_resume', resume_id=resume.id) }}"
+    enctype="multipart/form-data"
+    novalidate
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input
+      type="hidden"
+      name="exp_count"
+      value="{{ resume_data.experience|length }}"
+    />
+    <input
+      type="hidden"
+      name="edu_count"
+      value="{{ resume_data.education|length }}"
+    />
+
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- Resume Details Card -->
+        <div class="card mb-4">
+          <div class="card-header bg-navy text-white">
+            <h2 class="h5 mb-0">Resume Details</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-4">
+              <label for="title" class="form-label">Resume Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                value="{{ resume.title }}"
+                required
+              />
+              <div class="invalid-feedback">Please provide a resume title.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Profile Photo</label>
+              <div class="d-flex align-items-center">
+                <div class="me-3">
+                  <img
+                    id="photoPreview"
+                    src="{% if resume.image %}{{ url_for('static', filename=resume.image.replace('static/', '')) }}{% else %}https://ui-avatars.com/api/?name={{ resume_data.personal_info.name|urlencode }}&background=random{% endif %}"
+                    alt="Profile preview"
+                    class="img-thumbnail"
+                    width="150"
+                    height="150"
+                    style="object-fit: cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="flex-grow-1">
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="photoInput"
+                    name="photo"
+                    accept="image/*"
+                    aria-describedby="photoHelp"
+                  />
+                  <div id="photoHelp" class="form-text">
+                    Recommended size: 150x150 pixels. Max file size: 2MB.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Personal Information Card -->
+        <div class="card mb-4">
+          <div class="card-header bg-navy text-white">
+            <h2 class="h5 mb-0">Personal Information</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  value="{{ resume_data.personal_info.name }}"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Please provide your full name.
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  value="{{ resume_data.personal_info.email }}"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Please provide a valid email address.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  value="{{ resume_data.personal_info.phone }}"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  name="address"
+                  value="{{ resume_data.personal_info.address }}"
+                />
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="linkedin" class="form-label">LinkedIn</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="linkedin"
+                  name="linkedin"
+                  value="{{ resume_data.personal_info.linkedin }}"
+                  placeholder="https://linkedin.com/in/username"
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="website" class="form-label">Website</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="website"
+                  name="website"
+                  value="{{ resume_data.personal_info.website }}"
+                  placeholder="https://yourwebsite.com"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professional Summary Card -->
+        <div class="card mb-4">
+          <div class="card-header bg-navy text-white">
+            <h2 class="h5 mb-0">Professional Summary</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="summary" class="form-label">Summary</label>
+              <textarea
+                class="form-control"
+                id="summary"
+                name="summary"
+                rows="4"
+                placeholder="Write a brief summary of your professional background and career goals..."
+              >{{ resume_data.summary }}</textarea>
+              <div class="form-text">
+                Aim for 3-5 sentences that highlight your key strengths and
+                career objectives.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Work Experience Card -->
+        <div class="card mb-4">
+          <div
+            class="card-header bg-navy text-white d-flex justify-content-between align-items-center"
+          >
+            <h2 class="h5 mb-0">Work Experience</h2>
+            <button
+              type="button"
+              class="btn btn-sm btn-mint"
+              id="addExperience"
+            >
+              <i class="fas fa-plus me-1" aria-hidden="true"></i> Add Experience
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="experienceContainer">
+              {% for exp in resume_data.experience %}
+              <div class="experience-item card mb-3">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <h3 class="h6 mb-0">Experience #{{ loop.index }}</h3>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger remove-item"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Company</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="exp_company_{{ loop.index0 }}"
+                          value="{{ exp.company }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Position</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="exp_position_{{ loop.index0 }}"
+                          value="{{ exp.position }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input
+                          type="month"
+                          class="form-control"
+                          name="exp_start_{{ loop.index0 }}"
+                          value="{{ exp.start_date }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <input
+                          type="month"
+                          class="form-control"
+                          name="exp_end_{{ loop.index0 }}"
+                          value="{{ exp.end_date }}"
+                          {% if not exp.end_date %}disabled{% endif %}
+                        />
+                        <div class="form-check mt-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="exp_current_{{ loop.index0 }}"
+                            name="exp_current_{{ loop.index0 }}"
+                            {% if not exp.end_date %}checked{% endif %}
+                          />
+                          <label
+                            class="form-check-label"
+                            for="exp_current_{{ loop.index0 }}"
+                          >
+                            Current Job
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea
+                      class="form-control"
+                      name="exp_description_{{ loop.index0 }}"
+                      rows="3"
+                      placeholder="Describe your responsibilities and achievements..."
+                    >{{ exp.description }}</textarea>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Education Card -->
+        <div class="card mb-4">
+          <div
+            class="card-header bg-navy text-white d-flex justify-content-between align-items-center"
+          >
+            <h2 class="h5 mb-0">Education</h2>
+            <button type="button" class="btn btn-sm btn-mint" id="addEducation">
+              <i class="fas fa-plus me-1" aria-hidden="true"></i> Add Education
+            </button>
+          </div>
+          <div class="card-body">
+            <div id="educationContainer">
+              {% for edu in resume_data.education %}
+              <div class="education-item card mb-3">
+                <div
+                  class="card-header d-flex justify-content-between align-items-center"
+                >
+                  <h3 class="h6 mb-0">Education #{{ loop.index }}</h3>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger remove-item"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Institution</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="edu_institution_{{ loop.index0 }}"
+                          value="{{ edu.institution }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Degree</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="edu_degree_{{ loop.index0 }}"
+                          value="{{ edu.degree }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Field of Study</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="edu_field_{{ loop.index0 }}"
+                          value="{{ edu.field }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input
+                          type="month"
+                          class="form-control"
+                          name="edu_start_{{ loop.index0 }}"
+                          value="{{ edu.start_date }}"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <input
+                          type="month"
+                          class="form-control"
+                          name="edu_end_{{ loop.index0 }}"
+                          value="{{ edu.end_date }}"
+                          {% if not edu.end_date %}disabled{% endif %}
+                        />
+                        <div class="form-check mt-2">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="edu_current_{{ loop.index0 }}"
+                            name="edu_current_{{ loop.index0 }}"
+                            {% if not edu.end_date %}checked{% endif %}
+                          />
+                          <label
+                            class="form-check-label"
+                            for="edu_current_{{ loop.index0 }}"
+                          >
+                            Currently Studying
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea
+                          class="form-control"
+                          name="edu_description_{{ loop.index0 }}"
+                          rows="3"
+                          placeholder="Relevant courses, achievements, or activities..."
+                        >{{ edu.description }}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Card -->
+        <div class="card mb-4">
+          <div class="card-header bg-navy text-white">
+            <h2 class="h5 mb-0">Skills</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="skills" class="form-label">Skills</label>
+              <input
+                type="text"
+                class="form-control"
+                id="skills"
+                name="skills"
+                value="{{ resume_data.skills|join(', ') }}"
+                placeholder="e.g., Python, JavaScript, Project Management, Communication"
+              />
+              <div class="form-text">
+                Enter your skills separated by commas. Focus on relevant skills
+                for your target position.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <!-- Template Selection Card -->
+        <div class="card mb-4">
+          <div class="card-header bg-navy text-white">
+            <h2 class="h5 mb-0">Choose Template</h2>
+          </div>
+          <div class="card-body">
+            <input
+              type="hidden"
+              name="template"
+              id="selectedTemplate"
+              value="{{ resume.template }}"
+              required
+            />
+
+            <!-- Template Categories Tabs -->
+            <ul class="nav nav-pills mb-4" id="templateTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="standard-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#standard-templates"
+                  type="button"
+                  role="tab"
+                  aria-controls="standard-templates"
+                  aria-selected="true"
+                >
+                  Standard Templates
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="premium-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#premium-templates"
+                  type="button"
+                  role="tab"
+                  aria-controls="premium-templates"
+                  aria-selected="false"
+                >
+                  Premium Templates
+                </button>
+              </li>
+            </ul>
+
+            <!-- Template Content -->
+            <div class="tab-content" id="templateTabsContent">
+              <!-- Standard Templates -->
+              <div
+                class="tab-pane fade show active"
+                id="standard-templates"
+                role="tabpanel"
+                aria-labelledby="standard-tab"
+              >
+                <div class="row g-3">
+                  {% for i in range(1, 7) %}
+                  <div class="col-6">
+                    <div
+                      class="resume-template {% if resume.template == i|string %}selected{% endif %}"
+                      data-template="{{ i }}"
+                    >
+                      <div class="template-preview">
+                        <i class="fas fa-file-alt fa-3x" aria-hidden="true"></i>
+                      </div>
+                      <div class="template-name">Template {{ i }}</div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <!-- Premium Templates -->
+              <div
+                class="tab-pane fade"
+                id="premium-templates"
+                role="tabpanel"
+                aria-labelledby="premium-tab"
+              >
+                <div class="row g-3">
+                  {% for i in range(7, 13) %}
+                  <div class="col-6">
+                    <div
+                      class="resume-template {% if resume.template == i|string %}selected{% endif %} {% if is_premium_template(i|string) and not (user.is_premium and user.subscription_status == 'active') %}template-disabled{% endif %}" 
+                      data-template="{{ i }}"
+                      {% if is_premium_template(i|string) and not (user.is_premium and user.subscription_status == 'active') %}title="Premium template - upgrade to access"{% endif %}>
+                      <div class="template-preview">
+                        <span class="premium-badge">Premium</span>
+                        <i class="fas fa-crown fa-3x text-warning" aria-hidden="true"></i>
+                      </div>
+                      <div class="template-name">Template {{ i }}</div>
+                      {% if is_premium_template(i|string) and not (user.is_premium and user.subscription_status == 'active') %}
+                      <div class="template-overlay">
+                        <a href="{{ url_for('pricing') }}" class="btn btn-sm btn-mint">Upgrade to Access</a>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Card -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-mint btn-lg">
+                <i class="fas fa-save me-2" aria-hidden="true"></i> Update
+                Resume
+              </button>
+              <a
+                href="{{ url_for('preview_resume', resume_id=resume.id) }}"
+                class="btn btn-outline-primary"
+              >
+                <i class="fas fa-eye me-2" aria-hidden="true"></i> Preview
+                Resume
+              </a>
+              <a
+                href="{{ url_for('download_resume', resume_id=resume.id) }}"
+                class="btn btn-outline-success"
+              >
+                <i class="fas fa-download me-2" aria-hidden="true"></i> Download
+                PDF
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Image preview
+    document.getElementById("photoInput").addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        // Validate file size
+        if (file.size > 2 * 1024 * 1024) {
+          alert("File size must be less than 2MB");
+          this.value = "";
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("photoPreview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Template selection with access control
+    document.querySelectorAll(".resume-template").forEach((template) => {
+      template.addEventListener("click", function () {
+        // Check if template is disabled (premium without access)
+        if (this.classList.contains("template-disabled")) {
+          alert("Premium templates require an active subscription. Please upgrade to access premium templates.");
+          window.location.href = "{{ url_for('pricing') }}";
+          return;
+        }
+        
+        document.querySelectorAll(".resume-template").forEach((t) => t.classList.remove("selected"));
+        this.classList.add("selected");
+        document.getElementById("selectedTemplate").value = this.dataset.template;
+      });
+    });
+
+    // Current job/study checkboxes
+    document.querySelectorAll('input[type="checkbox"][id^="exp_current_"]').forEach((checkbox) => {
+      checkbox.addEventListener("change", function () {
+        const index = this.id.split('_')[2];
+        const endDateInput = document.querySelector(`input[name="exp_end_${index}"]`);
+        endDateInput.disabled = this.checked;
+        if (this.checked) {
+          endDateInput.value = "";
+        }
+      });
+    });
+
+    document.querySelectorAll('input[type="checkbox"][id^="edu_current_"]').forEach((checkbox) => {
+      checkbox.addEventListener("change", function () {
+        const index = this.id.split('_')[2];
+        const endDateInput = document.querySelector(`input[name="edu_end_${index}"]`);
+        endDateInput.disabled = this.checked;
+        if (this.checked) {
+          endDateInput.value = "";
+        }
+      });
+    });
+
+    // Add experience/education functionality
+    let experienceCount = {{ resume_data.experience|length }};
+    let educationCount = {{ resume_data.education|length }};
+
+    document.getElementById("addExperience").addEventListener("click", function () {
+      experienceCount++;
+      const experienceHtml = `
+      <div class="experience-item card mb-3" data-index="${experienceCount}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="h6 mb-0">Experience #${experienceCount}</h3>
+          <button type="button" class="btn btn-sm btn-outline-danger remove-item">
+            Remove
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Company</label>
+                <input type="text" class="form-control" name="exp_company_${experienceCount}" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Position</label>
+                <input type="text" class="form-control" name="exp_position_${experienceCount}" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Start Date</label>
+                <input type="month" class="form-control" name="exp_start_${experienceCount}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">End Date</label>
+                <input type="month" class="form-control" name="exp_end_${experienceCount}">
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="exp_current_${experienceCount}" name="exp_current_${experienceCount}">
+                  <label class="form-check-label" for="exp_current_${experienceCount}">Current Job</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="exp_description_${experienceCount}" rows="3" placeholder="Describe your responsibilities and achievements..."></textarea>
+          </div>
+        </div>
+      </div>
+      `;
+      document.getElementById("experienceContainer").insertAdjacentHTML("beforeend", experienceHtml);
+
+      // Add event listener to the new checkbox
+      const newCheckbox = document.getElementById(`exp_current_${experienceCount}`);
+      newCheckbox.addEventListener("change", function() {
+        const endDateInput = document.querySelector(`input[name="exp_end_${experienceCount}"]`);
+        endDateInput.disabled = this.checked;
+        if (this.checked) {
+          endDateInput.value = "";
+        }
+      });
+    });
+
+    document.getElementById("addEducation").addEventListener("click", function () {
+      educationCount++;
+      const educationHtml = `
+      <div class="education-item card mb-3" data-index="${educationCount}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h3 class="h6 mb-0">Education #${educationCount}</h3>
+          <button type="button" class="btn btn-sm btn-outline-danger remove-item">
+            Remove
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Institution</label>
+                <input type="text" class="form-control" name="edu_institution_${educationCount}" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Degree</label>
+                <input type="text" class="form-control" name="edu_degree_${educationCount}" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Field of Study</label>
+                <input type="text" class="form-control" name="edu_field_${educationCount}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Start Date</label>
+                <input type="month" class="form-control" name="edu_start_${educationCount}">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">End Date</label>
+                <input type="month" class="form-control" name="edu_end_${educationCount}">
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="edu_current_${educationCount}" name="edu_current_${educationCount}">
+                  <label class="form-check-label" for="edu_current_${educationCount}">Currently Studying</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" name="edu_description_${educationCount}" rows="3" placeholder="Relevant courses, achievements, or activities..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+      document.getElementById("educationContainer").insertAdjacentHTML("beforeend", educationHtml);
+
+      // Add event listener to the new checkbox
+      const newCheckbox = document.getElementById(`edu_current_${educationCount}`);
+      newCheckbox.addEventListener("change", function() {
+        const endDateInput = document.querySelector(`input[name="edu_end_${educationCount}"]`);
+        endDateInput.disabled = this.checked;
+        if (this.checked) {
+          endDateInput.value = "";
+        }
+      });
+    });
+
+    // Remove items
+    document.addEventListener("click", function (e) {
+      if (e.target.classList.contains("remove-item")) {
+        if (confirm("Are you sure you want to remove this item?")) {
+          e.target.closest(".experience-item, .education-item").remove();
+        }
+      }
+    });
+
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  });
+</script>
+
+[file name]: edit_resume.html
+<style>
+  .resume-template {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 1rem;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 160px;
+    background: white;
+  }
+
+  .resume-template:hover {
+    border-color: #64ffda;
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(100, 255, 218, 0.2);
+  }
+
+  .resume-template.selected {
+    border-color: #198754;
+    background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%);
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.25), 0 10px 30px rgba(25, 135, 84, 0.15);
+    transform: translateY(-3px);
+  }
+
+  .template-preview {
+    margin-bottom: 1rem;
+    color: #6c757d;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .resume-template.selected .template-preview {
+    color: #198754;
+    transform: scale(1.1);
+  }
+
+  .premium-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(145deg, #ffd700, #ffa500);
+    color: #000;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }
+
+  .template-disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    position: relative;
+    filter: grayscale(0.7);
+  }
+  
+  .template-disabled:hover {
+    border-color: #e9ecef !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  .template-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+    z-index: 2;
+  }
+  
+  .template-disabled:hover .template-overlay {
+    opacity: 1;
+  }
+
+  .nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+  }
+
+  .card {
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .card-header.bg-navy {
+    background: linear-gradient(135deg, #0a192f 0%, #1a2b4d 100%) !important;
+    border-radius: 12px 12px 0 0 !important;
+  }
+
+  .btn-mint {
+    background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(25, 135, 84, 0.4);
+    background: linear-gradient(135deg, #157347 0%, #19a27c 100%);
+  }
+
+  @media (max-width: 768px) {
+    .resume-template {
+      padding: 1rem 0.5rem;
+      min-height: 140px;
+    }
+
+    .template-preview {
+      height: 60px;
+    }
+
+    .template-preview i {
+      font-size: 2rem !important;
+    }
+  }
+</style>
+{% endblock %}

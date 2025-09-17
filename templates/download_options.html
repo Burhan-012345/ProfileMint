@@ -1,0 +1,490 @@
+{% extends "base.html" %} {% block title %}Download Options - ProfileMint{%
+endblock %} {% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-navy text-white py-3">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-download me-2"></i>
+            <h2 class="h5 mb-0">Download & Share Options</h2>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <h3 class="h6 mb-2">Choose download format for</h3>
+            <h4 class="h4 fw-bold text-primary">"{{ resume.title }}"</h4>
+            <p class="text-muted">
+              Last modified: {{ resume.updated_at.strftime('%B %d, %Y at %H:%M')
+              }}
+            </p>
+          </div>
+
+          <!-- Download Options -->
+          <div class="row mb-5 justify-content-center">
+            <div class="col-md-6 mb-4">
+              <div class="download-option-card p-4 h-100 text-center">
+                <div
+                  class="bg-danger bg-opacity-10 rounded-circle p-3 mx-auto mb-3"
+                  style="width: 80px; height: 80px"
+                >
+                  <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                </div>
+                <h5 class="fw-bold mb-2">PDF Format</h5>
+                <p class="text-muted small mb-3">
+                  Best for printing and professional applications
+                </p>
+                <form
+                  method="POST"
+                  action="{{ url_for('download_resume', resume_id=resume.id) }}"
+                  class="mt-3"
+                >
+                  <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                  />
+                  <input type="hidden" name="format" value="pdf" />
+                  <button type="submit" class="btn btn-danger w-100">
+                    <i class="fas fa-download me-2"></i> Download PDF
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Share options section -->
+          <div
+            class="share-section p-4 rounded"
+            style="background-color: #f8f9fa"
+          >
+            <h4 class="h5 fw-bold mb-4 text-center">
+              <i class="fas fa-share-alt me-2"></i>Share Your Resume
+            </h4>
+            <p class="text-muted text-center mb-4">
+              Share your resume directly on social media or via email
+            </p>
+
+            <div class="row">
+              <div class="col-md-6">
+                <h5 class="h6 mb-3">Social Platforms</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <a
+                    href="#"
+                    class="btn btn-outline-primary share-btn"
+                    data-platform="linkedin"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-linkedin me-2"></i> LinkedIn
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-info share-btn"
+                    data-platform="twitter"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-twitter me-2"></i> Twitter
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-success share-btn"
+                    data-platform="whatsapp"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-primary share-btn"
+                    data-platform="facebook"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-facebook me-2"></i> Facebook
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-danger share-btn"
+                    data-platform="pinterest"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-pinterest me-2"></i> Pinterest
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#shareLinkModal"
+                  >
+                    <i class="fas fa-link me-2"></i> Copy Link
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <h5 class="h6 mb-3">Email & Direct Sharing</h5>
+                <div class="d-flex flex-wrap gap-2">
+                  <a
+                    href="#"
+                    class="btn btn-outline-dark share-btn"
+                    data-platform="email"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fas fa-envelope me-2"></i> Email
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-secondary share-btn"
+                    data-platform="telegram"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-telegram me-2"></i> Telegram
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-secondary share-btn"
+                    data-platform="reddit"
+                    data-resume-id="{{ resume.id }}"
+                  >
+                    <i class="fab fa-reddit me-2"></i> Reddit
+                  </a>
+                  <button
+                    class="btn btn-outline-info"
+                    data-bs-toggle="modal"
+                    data-bs-target="#embedModal"
+                  >
+                    <i class="fas fa-code me-2"></i> Embed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <a
+              href="{{ url_for('view_resume', resume_id=resume.id) }}"
+              class="btn btn-outline-secondary me-md-2"
+            >
+              <i class="fas fa-arrow-left me-2"></i> Back to Preview
+            </a>
+            <a href="{{ url_for('my_resumes') }}" class="btn btn-outline-navy">
+              <i class="fas fa-list me-2"></i> View All Resumes
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Share Link Modal -->
+<div
+  class="modal fade"
+  id="shareLinkModal"
+  tabindex="-1"
+  aria-labelledby="shareLinkModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareLinkModalLabel">
+          <i class="fas fa-link me-2"></i>Shareable Link
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Copy this link to share your resume:</p>
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            id="shareableLink"
+            readonly
+            value="{{ url_for('share_resume', resume_id=resume.id, _external=True) if resume.is_public else url_for('view_resume', resume_id=resume.id, _external=True) }}"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="copyLinkBtn"
+          >
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox"
+          id="enablePublicAccess" {{ 'checked' if resume.is_public else '' }} />
+          <label class="form-check-label" for="enablePublicAccess">
+            Make this resume publicly accessible
+          </label>
+        </div>
+        <div class="alert alert-info small">
+          <i class="fas fa-info-circle me-2"></i>
+          When enabled, anyone with the link can view your resume without
+          logging in.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-mint" id="savePublicSetting">
+          Save Setting
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Embed Code Modal -->
+<div
+  class="modal fade"
+  id="embedModal"
+  tabindex="-1"
+  aria-labelledby="embedModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="embedModalLabel">
+          <i class="fas fa-code me-2"></i>Embed Resume
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Embed your resume on your website or blog using this code:</p>
+        <div class="input-group mb-3">
+          <textarea class="form-control" id="embedCode" rows="4" readonly>
+<iframe src="{{ url_for('share_resume', resume_id=resume.id, _external=True) }}" width="100%" height="600" frameborder="0" allowfullscreen></iframe></textarea
+          >
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="copyEmbedBtn"
+          >
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        <div class="alert alert-warning small">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Your resume must be set to "publicly accessible" for the embed to
+          work.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div
+    id="settingSavedToast"
+    class="toast"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="toast-header bg-success text-white">
+      <i class="fas fa-check-circle me-2"></i>
+      <strong class="me-auto">Success</strong>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="toast-body">Visibility setting saved successfully!</div>
+  </div>
+</div>
+
+<style>
+  .download-option-card {
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  }
+
+  .download-option-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(220, 53, 69, 0.3);
+  }
+
+  .share-section {
+    border-radius: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .share-btn {
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1.25rem;
+    font-weight: 500;
+    border-width: 2px;
+  }
+
+  .share-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-content {
+    border-radius: 16px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  }
+
+  .toast {
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-outline-navy {
+    border: 2px solid #0a192f;
+    color: #0a192f;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-navy:hover {
+    background-color: #0a192f;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10, 25, 47, 0.3);
+  }
+</style>
+
+<script>
+  // Copy link functionality
+  document.getElementById('copyLinkBtn').addEventListener('click', function() {
+    const linkInput = document.getElementById('shareableLink');
+    linkInput.select();
+    document.execCommand('copy');
+
+    // Show feedback
+    const originalText = this.innerHTML;
+    this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => {
+      this.innerHTML = originalText;
+    }, 2000);
+  });
+
+  // Copy embed code functionality
+  document.getElementById('copyEmbedBtn').addEventListener('click', function() {
+    const embedTextarea = document.getElementById('embedCode');
+    embedTextarea.select();
+    document.execCommand('copy');
+
+    // Show feedback
+    const originalText = this.innerHTML;
+    this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    setTimeout(() => {
+      this.innerHTML = originalText;
+    }, 2000);
+  });
+
+  // Share buttons functionality
+  document.querySelectorAll('.share-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const platform = this.getAttribute('data-platform');
+      const resumeId = this.getAttribute('data-resume-id');
+      const shareUrl = encodeURIComponent("{{ url_for('share_resume', resume_id=resume.id, _external=True) if resume.is_public else url_for('view_resume', resume_id=resume.id, _external=True) }}");
+      const title = encodeURIComponent("Check out my resume: {{ resume.title }}");
+      const summary = encodeURIComponent("Created with ProfileMint - Professional Resume Builder");
+
+      let shareWindowUrl;
+
+      switch(platform) {
+        case 'linkedin':
+          shareWindowUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`;
+          break;
+        case 'twitter':
+          shareWindowUrl = `https://twitter.com/intent/tweet?text=${title}&url=${shareUrl}`;
+          break;
+        case 'facebook':
+          shareWindowUrl = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+          break;
+        case 'whatsapp':
+          shareWindowUrl = `https://wa.me/?text=${title}%20${shareUrl}`;
+          break;
+        case 'pinterest':
+          shareWindowUrl = `https://pinterest.com/pin/create/button/?url=${shareUrl}&description=${title}`;
+          break;
+        case 'reddit':
+          shareWindowUrl = `https://reddit.com/submit?url=${shareUrl}&title=${title}`;
+          break;
+        case 'telegram':
+          shareWindowUrl = `https://t.me/share/url?url=${shareUrl}&text=${title}`;
+          break;
+        case 'email':
+          shareWindowUrl = `mailto:?subject=${title}&body=${summary}%0A%0A${shareUrl}`;
+          break;
+        default:
+          return;
+      }
+
+      if (platform === 'email') {
+        window.location.href = shareWindowUrl;
+      } else {
+        window.open(shareWindowUrl, '_blank', 'width=600,height=400');
+      }
+    });
+  });
+
+  // Save public access setting
+  document.getElementById('savePublicSetting').addEventListener('click', function() {
+    const isPublic = document.getElementById('enablePublicAccess').checked;
+    const resumeId = {{ resume.id }};
+
+    fetch('/api/set-resume-visibility/' + resumeId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token() }}'
+      },
+      body: JSON.stringify({ is_public: isPublic })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Update the shareable link with the public URL if needed
+        if (isPublic) {
+          document.getElementById('shareableLink').value = "{{ url_for('share_resume', resume_id=resume.id, _external=True) }}";
+        }
+
+        // Show success message
+        const toast = new bootstrap.Toast(document.getElementById('settingSavedToast'));
+        toast.show();
+
+        setTimeout(() => {
+          $('#shareLinkModal').modal('hide');
+        }, 1500);
+      } else {
+        alert('Error saving setting: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while saving the setting.');
+    });
+  });
+</script>
+{% endblock %}

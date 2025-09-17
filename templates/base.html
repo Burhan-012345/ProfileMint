@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="ProfileMint - Create professional resumes in minutes with our easy-to-use resume builder."
+    />
+    <meta
+      name="keywords"
+      content="resume, CV, job application, professional resume, resume builder"
+    />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>ProfileMint - {% block title %}Resume Generator{% endblock %}</title>
+
+    <!-- Preload critical resources -->
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="preload"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="preload"
+      href="{{ url_for('static', filename='css/style.css') }}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <link
+      rel="preload"
+      href="{{ url_for('static', filename='css/transitions.css') }}"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/transitions.css') }}"
+      />
+    </noscript>
+
+    <noscript>
+      <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      />
+      <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+      />
+    </noscript>
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/favicon.ico') }}"
+      type="image/x-icon"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='img/favicon-32x32.png') }}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{{ url_for('static', filename='img/favicon-16x16.png') }}"
+    />
+
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ProfileMint",
+        "url": "https://profilemint.com",
+        "description": "Create professional resumes in minutes with our easy-to-use resume builder.",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
+    <style>
+      .navbar {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 0.8rem 0;
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 1.5rem;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 0.5rem 1rem !important;
+        border-radius: 8px;
+        margin: 0 2px;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: white;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover::after {
+        width: 70%;
+      }
+
+      .dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        padding: 0.5rem;
+      }
+
+      .dropdown-item {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .dropdown-item:hover {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        transform: translateX(5px);
+      }
+
+      .btn-mint {
+        background: linear-gradient(135deg, #198754, #20c997);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+      }
+
+      .btn-mint:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4);
+        background: linear-gradient(135deg, #157347, #19a97d);
+      }
+
+      footer {
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .social-links a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .alert {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: white;
+        padding: 8px;
+        z-index: 10000;
+        transition: top 0.3s;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
+
+      @media (max-width: 768px) {
+        .navbar-brand {
+          font-size: 1.3rem;
+        }
+
+        .nav-link {
+          padding: 0.5rem !important;
+          margin: 2px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable"
+      >Skip to main content</a
+    >
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex align-items-center"
+          href="{{ url_for('index') }}"
+        >
+          <img
+            src="{{ url_for('static', filename='img/mint.png') }}"
+            alt="ProfileMint Logo"
+            height="40"
+            width="40"
+            class="d-inline-block align-text-top me-2"
+            loading="lazy"
+          />
+          <span class="fw-bold">ProfileMint</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            {% if 'user_id' in session %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dashboard') }}"
+                >Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('my_resumes') }}"
+                >My Resumes</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('create_resume') }}"
+                >Create Resume</a
+              >
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#features"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#about">About</a>
+            </li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav">
+            {% if 'user_id' in session %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle d-flex align-items-center"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fas fa-user me-1" aria-hidden="true"></i>
+                {{ session['user_name'] or session['user_email'] }}
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end shadow"
+                aria-labelledby="navbarDropdown"
+              >
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('account') }}">
+                    <i class="fas fa-user-circle me-2" aria-hidden="true"></i
+                    >Account
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('settings') }}">
+                    <i class="fas fa-cog me-2" aria-hidden="true"></i>Settings
+                  </a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i
+                    >Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link btn btn-mint btn-sm text-white ms-2"
+                href="{{ url_for('register') }}"
+                >Register</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+        <div
+          class="alert alert-{{ category }} alert-dismissible fade show"
+          role="alert"
+        >
+          <span>{{ message }}</span>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-navy text-white py-5 mt-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="d-flex align-items-center mb-3">
+              <img
+                src="{{ url_for('static', filename='img/mint.png') }}"
+                alt="ProfileMint Logo"
+                height="40"
+                width="40"
+                class="me-2"
+                loading="lazy"
+              />
+              <h5 class="mb-0 fw-bold">ProfileMint</h5>
+            </div>
+            <p class="mb-3">
+              Create professional resumes in minutes with our easy-to-use resume
+              builder.
+            </p>
+            <div class="social-links">
+              <a href="#" class="text-white me-3" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="text-white me-3" aria-label="Twitter">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="text-white me-3" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="#" class="text-white" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-lg-2 mb-4 mb-md-0">
+            <h5 class="fw-bold mb-3">Quick Links</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('index') }}"
+                  class="text-white text-decoration-none"
+                  >Home</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('index') }}#features"
+                  class="text-white text-decoration-none"
+                  >Features</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('about') }}"
+                  class="text-white text-decoration-none"
+                  >About Us</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('pricing') }}"
+                  class="text-white text-decoration-none"
+                  >Pricing</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-4 col-lg-3 mb-4 mb-md-0">
+            <h5 class="fw-bold mb-3">Account</h5>
+            <ul class="list-unstyled">
+              {% if 'user_id' in session %}
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('dashboard') }}"
+                  class="text-white text-decoration-none"
+                  >Dashboard</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('logout') }}"
+                  class="text-white text-decoration-none"
+                  >Logout</a
+                >
+              </li>
+              {% else %}
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('login') }}"
+                  class="text-white text-decoration-none"
+                  >Login</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('register') }}"
+                  class="text-white text-decoration-none"
+                  >Register</a
+                >
+              </li>
+              {% endif %}
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('forgot_password') }}"
+                  class="text-white text-decoration-none"
+                  >Forgot Password</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-4 col-lg-3">
+            <h5 class="fw-bold mb-3">Support & Legal</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('contact_support') }}"
+                  class="text-white text-decoration-none"
+                  >Contact Support</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('terms') }}"
+                  class="text-white text-decoration-none"
+                  >Terms & Conditions</a
+                >
+              </li>
+              <li class="mb-2">
+                <a
+                  href="{{ url_for('privacy') }}"
+                  class="text-white text-decoration-none"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p class="mb-0">&copy; 2023 ProfileMint. All rights reserved.</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <a
+              href="{{ url_for('privacy') }}"
+              class="text-white text-decoration-none me-3"
+              >Privacy Policy</a
+            >
+            <a
+              href="{{ url_for('terms') }}"
+              class="text-white text-decoration-none"
+              >Terms of Service</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Loading optimization for non-critical scripts -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+    <script
+      src="{{ url_for('static', filename='js/script.js') }}"
+      defer
+    ></script>
+    {% block scripts %}{% endblock %}
+
+    <!-- Performance monitoring -->
+    <script>
+      // Simple performance monitoring
+      window.addEventListener("load", function () {
+        // Send performance metrics to analytics
+        setTimeout(function () {
+          const perfData = window.performance.timing;
+          const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+          const domReady =
+            perfData.domContentLoadedEventEnd - perfData.navigationStart;
+
+          console.log("Page load time:", loadTime);
+          console.log("DOM ready time:", domReady);
+
+          // You can send this data to your analytics service
+        }, 0);
+      });
+    </script>
+  </body>
+</html>

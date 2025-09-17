@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>Premium Subscription - ProfileMint</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* subscription.html */
+      :root {
+        --primary-color: #0a192f;
+        --accent-color: #64ffda;
+        --light-accent: rgba(100, 255, 218, 0.1);
+        --light-navy: rgba(10, 25, 47, 0.05);
+        --lighter-navy: rgba(10, 25, 47, 0.02);
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          var(--lighter-navy) 0%,
+          #f8f9fa 100%
+        );
+        color: var(--primary-color);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar {
+        box-shadow: 0 2px 20px rgba(10, 25, 47, 0.1);
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #1a2b47 100%
+        );
+      }
+
+      .bg-navy {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #1a2b47 100%
+        );
+      }
+
+      .btn-mint {
+        background: linear-gradient(
+          135deg,
+          var(--accent-color) 0%,
+          #4fd1c5 100%
+        );
+        color: var(--primary-color);
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 30px;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+      }
+
+      .btn-mint:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(100, 255, 218, 0.4);
+        background: linear-gradient(
+          135deg,
+          #4fd1c5 0%,
+          var(--accent-color) 100%
+        );
+      }
+
+      .pricing-card {
+        border: 2px solid var(--light-navy);
+        border-radius: 20px;
+        transition: var(--transition);
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+        backdrop-filter: blur(10px);
+      }
+
+      .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--card-shadow);
+        border-color: var(--accent-color);
+      }
+
+      .pricing-card.premium {
+        border: 3px solid var(--accent-color);
+        background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .pricing-card.premium::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--accent-color),
+          var(--primary-color)
+        );
+      }
+
+      .premium-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: linear-gradient(
+          135deg,
+          var(--accent-color) 0%,
+          #4fd1c5 100%
+        );
+        color: var(--primary-color);
+        padding: 8px 20px;
+        font-weight: 700;
+        border-bottom-left-radius: 20px;
+        font-size: 0.8rem;
+        box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+      }
+
+      .premium-template {
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        border: 2px solid var(--light-navy);
+      }
+
+      .premium-template:hover {
+        transform: scale(1.05);
+        border-color: var(--accent-color);
+      }
+
+      .premium-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          rgba(10, 25, 47, 0.9) 0%,
+          rgba(100, 255, 218, 0.8) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: var(--transition);
+      }
+
+      .premium-template:hover .premium-overlay {
+        opacity: 1;
+      }
+
+      .currency-switch {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 30px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 50px;
+        padding: 8px;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--light-navy);
+      }
+
+      .currency-btn {
+        padding: 10px 25px;
+        border: none;
+        background: transparent;
+        color: var(--primary-color);
+        cursor: pointer;
+        font-weight: 500;
+        border-radius: 50px;
+        transition: var(--transition);
+      }
+
+      .currency-btn.active {
+        background: linear-gradient(
+          135deg,
+          var(--accent-color) 0%,
+          #4fd1c5 100%
+        );
+        color: var(--primary-color);
+        box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+      }
+
+      .price {
+        color: var(--primary-color);
+        position: relative;
+        display: inline-block;
+        font-weight: 700;
+      }
+
+      .price-period {
+        font-size: 1rem;
+        color: #6c757d;
+        font-weight: 500;
+      }
+
+      .feature-list {
+        text-align: left;
+        margin: 0 auto;
+        display: inline-block;
+      }
+
+      .feature-list li {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--light-navy);
+      }
+
+      .section-title {
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+
+      .section-title:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--accent-color),
+          var(--primary-color)
+        );
+        border-radius: 2px;
+      }
+
+      .testimonial-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 20px;
+        border-left: 4px solid var(--accent-color);
+        border: 1px solid var(--light-navy);
+      }
+
+      .testimonial-text {
+        font-style: italic;
+        margin-bottom: 15px;
+        color: var(--primary-color);
+        line-height: 1.6;
+      }
+
+      .testimonial-author {
+        font-weight: 600;
+        color: var(--primary-color);
+        opacity: 0.8;
+      }
+
+      .faq-item {
+        margin-bottom: 15px;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border: 1px solid var(--light-navy);
+      }
+
+      .faq-question {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: var(--transition);
+        color: var(--primary-color);
+      }
+
+      .faq-question:hover {
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+      }
+
+      .faq-answer {
+        background: #ffffff;
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+      }
+
+      .faq-item.active .faq-answer {
+        max-height: 200px;
+        padding: 20px;
+      }
+
+      .faq-item.active .fa-chevron-down {
+        transform: rotate(180deg);
+      }
+
+      .benefit-icon {
+        font-size: 3rem;
+        color: var(--accent-color);
+        margin-bottom: 20px;
+        background: linear-gradient(
+          135deg,
+          var(--light-navy) 0%,
+          var(--lighter-navy) 100%
+        );
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+      }
+
+      .benefit-card {
+        text-align: center;
+        padding: 40px 30px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        height: 100%;
+        border: 1px solid var(--light-navy);
+      }
+
+      .benefit-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        border-color: var(--accent-color);
+      }
+
+      .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 30px 0;
+        box-shadow: var(--card-shadow);
+        border-radius: 16px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 20px;
+        text-align: center;
+        border: 1px solid var(--light-navy);
+      }
+
+      .comparison-table thead th {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #1a2b47 100%
+        );
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+      }
+
+      .comparison-table tbody tr:nth-child(even) {
+        background: var(--lighter-navy);
+      }
+
+      .comparison-table tbody tr:hover {
+        background: var(--light-accent);
+      }
+
+      .comparison-table .feature-cell {
+        text-align: left;
+        font-weight: 500;
+        color: var(--primary-color);
+      }
+
+      .checkmark {
+        color: #28a745;
+        font-size: 1.4rem;
+      }
+
+      .crossmark {
+        color: #dc3545;
+        font-size: 1.4rem;
+      }
+
+      footer {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #1a2b47 100%
+        );
+        color: white;
+        padding: 60px 0 30px;
+        margin-top: 80px;
+      }
+
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: var(--transition);
+      }
+
+      .footer-links a:hover {
+        color: var(--accent-color);
+        transform: translateX(5px);
+      }
+
+      .social-icons a {
+        color: white;
+        font-size: 1.5rem;
+        margin-right: 15px;
+        transition: var(--transition);
+      }
+
+      .social-icons a:hover {
+        color: var(--accent-color);
+        transform: translateY(-3px);
+      }
+
+      /* Payment Modal Styles */
+      .payment-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1050;
+        overflow-y: auto;
+        backdrop-filter: blur(5px);
+      }
+
+      .payment-modal-content {
+        position: relative;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        margin: 5% auto;
+        padding: 0;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--light-navy);
+      }
+
+      .payment-modal-header {
+        padding: 25px;
+        border-bottom: 1px solid var(--light-navy);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          #1a2b47 100%
+        );
+        color: white;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .payment-modal-body {
+        padding: 25px;
+      }
+
+      .payment-modal-footer {
+        padding: 25px;
+        border-top: 1px solid var(--light-navy);
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        background: var(--lighter-navy);
+        border-radius: 0 0 20px 20px;
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: white;
+        transition: var(--transition);
+      }
+
+      .close-modal:hover {
+        color: var(--accent-color);
+      }
+
+      .payment-form {
+        margin-top: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid var(--light-navy);
+        border-radius: 12px;
+        font-size: 16px;
+        transition: var(--transition);
+        background: #ffffff;
+      }
+
+      .form-control:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 0.3rem rgba(100, 255, 218, 0.15);
+        outline: none;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 15px;
+      }
+
+      .form-row .form-group {
+        flex: 1;
+      }
+
+      .payment-processing {
+        display: none;
+        text-align: center;
+        padding: 40px;
+      }
+
+      .payment-success {
+        display: none;
+        text-align: center;
+        padding: 40px;
+        color: #28a745;
+      }
+
+      .payment-error {
+        display: none;
+        text-align: center;
+        padding: 40px;
+        color: #dc3545;
+      }
+
+      .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 20px;
+        color: var(--accent-color);
+      }
+
+      .demo-card {
+        background: linear-gradient(
+          135deg,
+          var(--lighter-navy) 0%,
+          #f8f9fa 100%
+        );
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+        border-left: 4px solid var(--accent-color);
+        border: 1px solid var(--light-navy);
+      }
+
+      .demo-card h6 {
+        margin-bottom: 15px;
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .demo-card ul {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 0.9rem;
+        color: var(--primary-color);
+      }
+
+      @media (max-width: 768px) {
+        /* Previous styles... */
+
+        /* Additional mobile optimizations */
+        .container {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+
+        .section-title {
+          font-size: 1.8rem;
+        }
+
+        .pricing-card .card-body {
+          padding: 30px 20px;
+        }
+
+        .feature-list li {
+          font-size: 0.9rem;
+        }
+
+        .testimonial-card {
+          padding: 20px;
+        }
+
+        .comparison-table {
+          font-size: 0.85rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+          padding: 10px 8px;
+        }
+
+        .faq-question {
+          padding: 12px 15px;
+          font-size: 0.95rem;
+        }
+
+        .final-cta .pricing-card {
+          padding: 30px 20px !important;
+        }
+
+        .btn-lg {
+          padding: 12px 24px;
+          font-size: 1rem;
+        }
+
+        .premium-template {
+          margin-bottom: 20px;
+        }
+
+        .benefit-card h4 {
+          font-size: 1.2rem;
+        }
+
+        .benefit-card p {
+          font-size: 0.9rem;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .display-4 {
+          font-size: 2rem;
+        }
+
+        .lead {
+          font-size: 1rem;
+        }
+
+        .currency-switch {
+          width: 100%;
+          max-width: 280px;
+        }
+
+        .price.display-4 {
+          font-size: 2.2rem;
+        }
+
+        .payment-modal-content {
+          margin: 15% auto;
+          width: 98%;
+        }
+
+        .payment-modal-header,
+        .payment-modal-body,
+        .payment-modal-footer {
+          padding: 15px;
+        }
+
+        .demo-card {
+          padding: 12px;
+        }
+
+        .demo-card ul {
+          font-size: 0.8rem;
+        }
+
+        footer .col-md-4,
+        footer .col-md-2 {
+          margin-bottom: 25px;
+        }
+
+        .social-icons a {
+          font-size: 1.3rem;
+          margin-right: 10px;
+        }
+      }
+
+      /* Very small devices */
+      @media (max-width: 380px) {
+        .currency-btn {
+          padding: 8px 12px;
+          font-size: 0.8rem;
+        }
+
+        .navbar-brand span {
+          font-size: 1rem;
+        }
+
+        .premium-badge {
+          font-size: 0.7rem;
+          padding: 4px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy fixed-top">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex align-items-center"
+          href="{{ url_for('index') }}"
+        >
+          <img
+            src="{{ url_for('static', filename='img/mint.png') }}"
+            alt="ProfileMint Logo"
+            height="40"
+            width="40"
+            class="d-inline-block align-text-top me-2"
+          />
+          <span class="fw-bold">ProfileMint</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            {% if 'user_id' in session %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('dashboard') }}"
+                >Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('my_resumes') }}"
+                >My Resumes</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('create_resume') }}"
+                >Create Resume</a
+              >
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#features"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}#about">About</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-5 mt-5">
+      <!-- Hero Section -->
+      <div class="row justify-content-center py-4">
+        <div class="col-lg-10 text-center mb-4">
+          <h1 class="display-4 fw-bold mb-3">
+            Upgrade to <span class="text-primary">Premium</span>
+          </h1>
+          <p class="lead fs-4">
+            Unlock exclusive features and premium templates to create standout
+            resumes that get you hired faster
+          </p>
+
+          <div class="d-flex justify-content-center mt-4">
+            <div class="currency-switch">
+              <button class="currency-btn active" data-currency="inr">
+                INR
+              </button>
+              <button class="currency-btn" data-currency="usd">USD</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benefits Section -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">Why Go Premium?</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-gem"></i>
+            </div>
+            <h4>Premium Templates</h4>
+            <p>
+              Access exclusive, professionally designed templates that stand out
+              from generic resumes.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-download"></i>
+            </div>
+            <h4>Unlimited Downloads</h4>
+            <p>
+              Download and print your resumes as many times as you need without
+              any restrictions.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h4>Priority Support</h4>
+            <p>
+              Get fast, dedicated support to help you create the perfect resume
+              for your job search.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Cards -->
+      <div class="row justify-content-center mb-5">
+        <!-- Free Plan -->
+        <div class="col-md-5 mb-4">
+          <div class="pricing-card h-100">
+            <div class="card-body text-center p-5">
+              <h3 class="card-title">Free Plan</h3>
+              <div class="price display-4 fw-bold mb-2">₹0</div>
+              <p class="text-muted">Forever free</p>
+              <ul class="feature-list mb-4">
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Basic templates
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> 1 PDF download
+                  per month
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Standard
+                  support
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-times text-danger me-2"></i> Premium
+                  templates
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-times text-danger me-2"></i> Unlimited
+                  downloads
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-times text-danger me-2"></i> Priority support
+                </li>
+              </ul>
+              <button class="btn btn-outline-primary" disabled>
+                Current Plan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="col-md-5 mb-4">
+          <div class="pricing-card premium h-100">
+            <div class="premium-badge">POPULAR</div>
+            <div class="card-body text-center p-5">
+              <h3 class="card-title">Premium Plan</h3>
+              <div class="price display-4 fw-bold mb-2">
+                <span class="price-amount" data-inr="₹299" data-usd="$9.99"
+                  >₹299</span
+                >
+              </div>
+              <!-- In subscription.html, update the price description -->
+              <p class="text-muted price-period">
+                <span class="period" data-inr="/month" data-usd="/month"
+                  >/month</span
+                >, billed monthly (30-day access)
+              </p>
+              <ul class="feature-list mb-4">
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> All basic
+                  templates
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> 10+ premium
+                  templates
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Unlimited PDF
+                  downloads
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Priority
+                  support
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Custom color
+                  schemes
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-check text-success me-2"></i> Advanced export
+                  options
+                </li>
+              </ul>
+              <button class="btn btn-mint btn-lg upgrade-btn">
+                Upgrade Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Template Preview -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">Premium Templates</h2>
+          <p class="lead">
+            Stand out with our professionally designed premium templates
+          </p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="premium-template">
+            <img
+              src="https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+              alt="Modern Resume Template"
+              class="img-fluid rounded"
+            />
+            <div class="premium-overlay">
+              <h4 class="text-white">Modern</h4>
+              <p class="text-white">Clean and professional design</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="premium-template">
+            <img
+              src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+              alt="Creative Resume Template"
+              class="img-fluid rounded"
+            />
+            <div class="premium-overlay">
+              <h4 class="text-white">Creative</h4>
+              <p class="text-white">For design and creative roles</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="premium-template">
+            <img
+              src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+              alt="Executive Resume Template"
+              class="img-fluid rounded"
+            />
+            <div class="premium-overlay">
+              <h4 class="text-white">Executive</h4>
+              <p class="text-white">For senior-level professionals</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">What Our Users Say</h2>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "The premium templates helped me land interviews at three top tech
+              companies. The investment paid off with my first job offer!"
+            </p>
+            <div class="testimonial-author">- Priya S., Software Engineer</div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "I was struggling to get callbacks until I switched to a premium
+              template. The professional design made all the difference."
+            </p>
+            <div class="testimonial-author">- Rahul M., Marketing Manager</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">Plan Comparison</h2>
+        </div>
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th style="width: 30%">Feature</th>
+                  <th style="width: 35%">Free Plan</th>
+                  <th style="width: 35%">Premium Plan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="feature-cell">Number of Templates</td>
+                  <td>5 Basic</td>
+                  <td>15+ (Including Premium)</td>
+                </tr>
+                <tr>
+                  <td class="feature-cell">PDF Downloads</td>
+                  <td>1 per month</td>
+                  <td>Unlimited</td>
+                </tr>
+                <tr>
+                  <td class="feature-cell">Custom Colors & Fonts</td>
+                  <td><i class="fas fa-times crossmark"></i></td>
+                  <td><i class="fas fa-check checkmark"></i></td>
+                </tr>
+                <tr>
+                  <td class="feature-cell">Priority Support</td>
+                  <td><i class="fas fa-times crossmark"></i></td>
+                  <td><i class="fas fa-check checkmark"></i></td>
+                </tr>
+                <tr>
+                  <td class="feature-cell">ATS Optimization</td>
+                  <td>Basic</td>
+                  <td>Advanced</td>
+                </tr>
+                <tr>
+                  <td class="feature-cell">Cover Letter Builder</td>
+                  <td><i class="fas fa-times crossmark"></i></td>
+                  <td><i class="fas fa-check checkmark"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="col-lg-8 mx-auto">
+          <div class="faq-item">
+            <div class="faq-question">
+              How does the subscription work?
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Our premium plan is a monthly subscription that gives you
+                unlimited access to all premium features. You can cancel anytime
+                with no obligation.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              Will I lose access to my resumes if I cancel?
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                No, you won't lose access to your resumes. You'll still be able
+                to view, edit, and download any resumes you created while you
+                were a premium member. However, you won't be able to create new
+                resumes using premium templates after cancellation.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              What payment methods do you accept?
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                We accept all major credit cards, debit cards, and PayPal for
+                payments.
+              </p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              Can I switch between free and premium plans?
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Yes, you can upgrade to premium at any time, and you can also
+                cancel your premium subscription to return to the free plan at
+                the end of your billing cycle.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final CTA -->
+      <div class="row justify-content-center mb-5">
+        <div class="col-lg-8 text-center">
+          <div class="pricing-card premium p-5">
+            <h2 class="mb-3">Ready to Upgrade Your Resume?</h2>
+            <p class="lead mb-4">
+              Join thousands of professionals who have accelerated their career
+              with ProfileMint Premium
+            </p>
+            <button class="btn btn-mint btn-lg px-5 py-3 upgrade-btn">
+              Get Premium Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="payment-modal">
+      <div class="payment-modal-content">
+        <div class="payment-modal-header">
+          <h5 class="modal-title">Upgrade to Premium</h5>
+          <button type="button" class="close-modal">&times;</button>
+        </div>
+        <div class="payment-modal-body">
+          <div class="payment-form" id="paymentForm">
+            <h6>Enter Payment Details</h6>
+            <p class="text-muted">
+              You will be charged
+              <span class="price-amount" data-inr="₹299" data-usd="$9.99"
+                >₹299</span
+              >
+              per month
+            </p>
+
+            <form id="paymentDetailsForm">
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+              <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cardNumber"
+                  placeholder="1234 5678 9012 3456"
+                  maxlength="19"
+                  required
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="expiryDate">Expiry Date</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="expiryDate"
+                    placeholder="MM/YY"
+                    maxlength="5"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="cvv">CVV</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="cvv"
+                    placeholder="123"
+                    maxlength="3"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="name">Name on Card</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+            </form>
+
+            <div class="demo-card">
+              <h6>Demo Payment Info (for testing):</h6>
+              <ul>
+                <li>Card: 4242 4242 4242 4242</li>
+                <li>Expiry: 12/25</li>
+                <li>CVV: 123</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="payment-processing" id="paymentProcessing">
+            <div class="spinner-border text-primary" role="status"></div>
+            <h5>Processing Payment...</h5>
+            <p>Please wait while we process your payment.</p>
+          </div>
+
+          <div class="payment-success" id="paymentSuccess">
+            <i class="fas fa-check-circle" style="font-size: 3rem"></i>
+            <h5>Payment Successful!</h5>
+            <p>Your premium subscription has been activated.</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-mint mt-3"
+              >Go to Dashboard</a
+            >
+          </div>
+
+          <div class="payment-error" id="paymentError">
+            <i class="fas fa-times-circle" style="font-size: 3rem"></i>
+            <h5>Payment Failed</h5>
+            <p id="errorMessage">
+              There was an error processing your payment. Please try again.
+            </p>
+            <button class="btn btn-outline-primary mt-3" id="retryPayment">
+              Try Again
+            </button>
+          </div>
+        </div>
+        <div class="payment-modal-footer">
+          <button type="button" class="btn btn-secondary close-modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-mint" id="submitPayment">
+            Pay Now
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <h5>ProfileMint</h5>
+            <p>
+              Create professional resumes that help you stand out in the job
+              market.
+            </p>
+          </div>
+          <div class="col-md-2 mb-4">
+            <h5>Links</h5>
+            <ul class="list-unstyled footer-links">
+              <li><a href="{{ url_for('index') }}">Home</a></li>
+              <li><a href="{{ url_for('index') }}#features">Features</a></li>
+              <li><a href="{{ url_for('index') }}#about">About</a></li>
+              <li><a href="{{ url_for('premium') }}">Premium</a></li>
+            </ul>
+          </div>
+          <div class="col-md-2 mb-4">
+            <h5>Legal</h5>
+            <ul class="list-unstyled footer-links">
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Refund Policy</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h5>Connect With Us</h5>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+        <hr class="mt-0 mb-4" />
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-0">&copy; 2023 ProfileMint. All rights reserved.</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <p class="mb-0">Made with ❤️ for job seekers worldwide</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Currency Toggle
+      document.querySelectorAll(".currency-btn").forEach((button) => {
+        button.addEventListener("click", function () {
+          document
+            .querySelectorAll(".currency-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          this.classList.add("active");
+
+          const currency = this.dataset.currency;
+          document.querySelectorAll(".price-amount").forEach((element) => {
+            element.textContent = element.dataset[currency];
+          });
+
+          document.querySelectorAll(".period").forEach((element) => {
+            element.textContent = element.dataset[currency];
+          });
+        });
+      });
+
+      // FAQ Accordion
+      document.querySelectorAll(".faq-question").forEach((question) => {
+        question.addEventListener("click", () => {
+          const item = question.parentElement;
+          item.classList.toggle("active");
+        });
+      });
+
+      // Payment Modal
+      const modal = document.getElementById("paymentModal");
+      const upgradeButtons = document.querySelectorAll(".upgrade-btn");
+      const closeButtons = document.querySelectorAll(".close-modal");
+      const submitPaymentBtn = document.getElementById("submitPayment");
+      const retryPaymentBtn = document.getElementById("retryPayment");
+      const paymentForm = document.getElementById("paymentForm");
+      const paymentProcessing = document.getElementById("paymentProcessing");
+      const paymentSuccess = document.getElementById("paymentSuccess");
+      const paymentError = document.getElementById("paymentError");
+      const errorMessage = document.getElementById("errorMessage");
+
+      // Format card number input
+      const cardNumberInput = document.getElementById("cardNumber");
+      cardNumberInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 16) value = value.slice(0, 16);
+        let formattedValue = "";
+        for (let i = 0; i < value.length; i++) {
+          if (i > 0 && i % 4 === 0) formattedValue += " ";
+          formattedValue += value[i];
+        }
+        e.target.value = formattedValue;
+      });
+
+      // Format expiry date input
+      const expiryDateInput = document.getElementById("expiryDate");
+      expiryDateInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 4) value = value.slice(0, 4);
+        if (value.length > 2) {
+          value = value.slice(0, 2) + "/" + value.slice(2);
+        }
+        e.target.value = value;
+      });
+
+      // Open modal
+      upgradeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          modal.style.display = "block";
+          document.body.style.overflow = "hidden";
+        });
+      });
+
+      // Close modal
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+          resetPaymentModal();
+        });
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          modal.style.display = "none";
+          document.body.style.overflow = "auto";
+          resetPaymentModal();
+        }
+      });
+
+      // Submit payment
+      submitPaymentBtn.addEventListener("click", () => {
+        // Simple validation
+        const cardNumber = document.getElementById("cardNumber").value;
+        const expiryDate = document.getElementById("expiryDate").value;
+        const cvv = document.getElementById("cvv").value;
+        const name = document.getElementById("name").value;
+
+        if (!cardNumber || !expiryDate || !cvv || !name) {
+          showError("Please fill in all payment details");
+          return;
+        }
+
+        // Show processing state
+        paymentForm.style.display = "none";
+        paymentProcessing.style.display = "block";
+        paymentSuccess.style.display = "none";
+        paymentError.style.display = "none";
+
+        // Get the CSRF token from the meta tag
+        const csrfToken = document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+
+        // Simulate payment processing
+        setTimeout(() => {
+          // For demo purposes, assume payment is successful with valid card
+          if (cardNumber.replace(/\s/g, "").startsWith("4242")) {
+            // Send payment data to server with CSRF token
+            fetch("{{ url_for('process_payment') }}", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+              },
+              body: JSON.stringify({
+                cardNumber: cardNumber,
+                expiryDate: expiryDate,
+                cvv: cvv,
+                name: name,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  showSuccess();
+                } else {
+                  showError(
+                    data.message || "Payment failed. Please try again."
+                  );
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                showError("An error occurred. Please try again.");
+              });
+          } else {
+            showError(
+              "Invalid card details. Please use the demo information provided."
+            );
+          }
+        }, 2000);
+      });
+
+      // Retry payment
+      retryPaymentBtn.addEventListener("click", () => {
+        resetPaymentModal();
+      });
+
+      // Show error message
+      function showError(message) {
+        paymentForm.style.display = "none";
+        paymentProcessing.style.display = "none";
+        paymentSuccess.style.display = "none";
+        paymentError.style.display = "block";
+        errorMessage.textContent = message;
+      }
+
+      // Show success message
+      function showSuccess() {
+        paymentForm.style.display = "none";
+        paymentProcessing.style.display = "none";
+        paymentSuccess.style.display = "block";
+        paymentError.style.display = "none";
+      }
+
+      // Reset payment modal to initial state
+      function resetPaymentModal() {
+        paymentForm.style.display = "block";
+        paymentProcessing.style.display = "none";
+        paymentSuccess.style.display = "none";
+        paymentError.style.display = "none";
+        document.getElementById("paymentDetailsForm").reset();
+      }
+    </script>
+  </body>
+</html>

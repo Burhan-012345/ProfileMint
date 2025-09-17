@@ -1,0 +1,530 @@
+{% extends "base.html" %} {% block title %}Register - ProfileMint{% endblock %}
+{% block content %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="auth-card card border-0 shadow-sm">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <div class="auth-logo mb-3">
+              <img
+                src="{{ url_for('static', filename='img/mint.png') }}"
+                alt="ProfileMint"
+                width="90"
+                height="90"
+                loading="lazy"
+              />
+            </div>
+            <h1 class="h2 fw-bold mb-2">Create an Account</h1>
+            <p class="text-muted">
+              Join thousands of users who create professional resumes with
+              ProfileMint
+            </p>
+          </div>
+
+          <form method="POST" action="{{ url_for('register') }}" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your full name"
+                  required
+                  autocomplete="name"
+                />
+                <div class="invalid-feedback">
+                  Please provide your full name.
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control form-control-lg"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  required
+                  autocomplete="email"
+                />
+                <div class="invalid-feedback">
+                  Please provide a valid email address.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control form-control-lg"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                    autocomplete="new-password"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="togglePassword"
+                    aria-label="Toggle password visibility"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">
+                  Password must be at least 8 characters with uppercase,
+                  lowercase, and number.
+                </div>
+                <div class="password-strength mt-2">
+                  <div class="progress mb-1" style="height: 4px">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                  <small class="text-muted password-strength-text"
+                    >Password strength</small
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="confirm_password" class="form-label"
+                  >Confirm Password</label
+                >
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control form-control-lg"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Confirm your password"
+                    required
+                    autocomplete="new-password"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="toggleConfirmPassword"
+                    aria-label="Toggle password visibility"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">Passwords must match.</div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="terms"
+                  name="terms"
+                  required
+                />
+                <label class="form-check-label" for="terms">
+                  I agree to the
+                  <a
+                    href="#"
+                    class="text-mint text-decoration-none me-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#privacyModal"
+                  >
+                    Privacy Policy
+                  </a>
+                  and
+                  <a
+                    href="#"
+                    class="text-mint text-decoration-none"
+                    data-bs-toggle="modal"
+                    data-bs-target="#termsModal"
+                  >
+                    Terms of Service
+                  </a>
+                </label>
+                <div class="invalid-feedback">
+                  You must agree to the terms and conditions.
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+              <button type="submit" class="btn btn-mint btn-lg">
+                Create Account
+              </button>
+            </div>
+          </form>
+
+          <div class="position-relative text-center my-4">
+            <hr class="my-4" />
+            <span
+              class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small"
+            >
+              Or sign up with
+            </span>
+          </div>
+
+          <div class="d-grid gap-2 mb-4">
+            <a
+              href="{{ url_for('login_google') }}"
+              class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center"
+            >
+              <img
+                src="https://developers.google.com/identity/images/g-logo.png"
+                alt="Google logo"
+                width="20"
+                height="20"
+                class="me-2"
+                loading="lazy"
+              />
+              Continue with Google
+            </a>
+          </div>
+
+          <div class="text-center">
+            <p class="mb-0">
+              Already have an account?
+              <a
+                href="{{ url_for('login') }}"
+                class="text-mint fw-semibold text-decoration-none"
+              >
+                Login
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div
+  class="modal fade"
+  id="privacyModal"
+  tabindex="-1"
+  aria-labelledby="privacyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>1. Information We Collect</h4>
+        <p>
+          We collect information you provide directly to us when you create an
+          account, build your resume, or communicate with us.
+        </p>
+
+        <h4>2. How We Use Your Information</h4>
+        <p>
+          We use your information to provide and improve our services,
+          communicate with you, and ensure the security of your account.
+        </p>
+
+        <h4>3. Data Storage and Security</h4>
+        <p>
+          Your data is stored securely and we implement appropriate security
+          measures to protect your personal information.
+        </p>
+
+        <h4>4. Your Rights</h4>
+        <p>
+          You have the right to access, update, or delete your personal
+          information at any time through your account settings.
+        </p>
+
+        <h4>5. Contact Us</h4>
+        <p>
+          If you have any questions about our privacy practices, please contact
+          us at privacy@profilemint.com
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Terms of Service Modal -->
+<div
+  class="modal fade"
+  id="termsModal"
+  tabindex="-1"
+  aria-labelledby="termsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="termsModalLabel">Terms of Service</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>1. Account Terms</h4>
+        <p>
+          You are responsible for maintaining the security of your account and
+          for all activities that occur under your account.
+        </p>
+
+        <h4>2. Acceptable Use</h4>
+        <p>
+          You agree not to misuse the ProfileMint service or help anyone else to
+          do so. This includes not violating any laws.
+        </p>
+
+        <h4>3. Content Ownership</h4>
+        <p>
+          You retain ownership of all content you create using ProfileMint. We
+          claim no intellectual property rights over your resumes.
+        </p>
+
+        <h4>4. Service Modifications</h4>
+        <p>
+          We reserve the right to modify or terminate the service for any
+          reason, without notice at any time.
+        </p>
+
+        <h4>5. Limitation of Liability</h4>
+        <p>
+          ProfileMint shall not be liable for any indirect, incidental, special,
+          consequential or punitive damages resulting from your use of the
+          service.
+        </p>
+
+        <h4>6. Governing Law</h4>
+        <p>
+          These Terms shall be governed by the laws of the jurisdiction in which
+          our company is established, without regard to its conflict of law
+          provisions.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+[file name]: register.html
+<style>
+  .auth-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    background: #c1d1e0; /* Light navy blue background */
+  }
+
+  .auth-logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: linear-gradient(145deg, #e6f7f0, #ffffff);
+    box-shadow: 0 10px 25px rgba(25, 135, 84, 0.2);
+  }
+
+  .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+  }
+
+  .password-strength .progress {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .password-strength .progress-bar {
+    transition: width 0.5s ease;
+    border-radius: 3px;
+  }
+
+  .btn-mint {
+    background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 20px rgba(25, 135, 84, 0.35);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(25, 135, 84, 0.5);
+    background: linear-gradient(135deg, #157347 0%, #19a27c 100%);
+  }
+
+  .btn-mint:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(25, 135, 84, 0.4);
+  }
+
+  .btn-mint::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: 0.5s;
+  }
+
+  .btn-mint:hover::before {
+    left: 100%;
+  }
+
+  .text-mint {
+    color: #198754 !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .text-mint:hover {
+    color: #0f5132 !important;
+    text-decoration: underline;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .divider-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .divider-text::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #dee2e6, transparent);
+    z-index: -1;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Form validation
+    const form = document.querySelector("form");
+    const password = document.getElementById("password");
+    const confirmPassword = document.getElementById("confirm_password");
+
+    form.addEventListener("submit", function (event) {
+      // Check if passwords match
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.setCustomValidity("Passwords don't match");
+      } else {
+        confirmPassword.setCustomValidity("");
+      }
+
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add("was-validated");
+    });
+
+    // Password strength indicator
+    password.addEventListener("input", function () {
+      const strengthBar = document.querySelector(
+        ".password-strength .progress-bar"
+      );
+      const strengthText = document.querySelector(".password-strength-text");
+      const value = password.value;
+      let strength = 0;
+
+      if (value.length > 5) strength += 20;
+      if (value.length > 7) strength += 20;
+      if (value.match(/[a-z]+/)) strength += 20;
+      if (value.match(/[A-Z]+/)) strength += 20;
+      if (value.match(/[0-9]+/)) strength += 20;
+
+      strengthBar.style.width = strength + "%";
+
+      if (strength < 40) {
+        strengthBar.className = "progress-bar bg-danger";
+        strengthText.textContent = "Weak password";
+      } else if (strength < 80) {
+        strengthBar.className = "progress-bar bg-warning";
+        strengthText.textContent = "Medium password";
+      } else {
+        strengthBar.className = "progress-bar bg-success";
+        strengthText.textContent = "Strong password";
+      }
+    });
+
+    // Toggle password visibility
+    function setupPasswordToggle(buttonId, inputId) {
+      const toggleButton = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+
+      toggleButton.addEventListener("click", function () {
+        const type =
+          input.getAttribute("type") === "password" ? "text" : "password";
+        input.setAttribute("type", type);
+
+        const eyeIcon = this.querySelector("i");
+        if (type === "text") {
+          eyeIcon.classList.remove("fa-eye");
+          eyeIcon.classList.add("fa-eye-slash");
+          this.setAttribute("aria-label", "Hide password");
+        } else {
+          eyeIcon.classList.remove("fa-eye-slash");
+          eyeIcon.classList.add("fa-eye");
+          this.setAttribute("aria-label", "Show password");
+        }
+      });
+    }
+
+    setupPasswordToggle("togglePassword", "password");
+    setupPasswordToggle("toggleConfirmPassword", "confirm_password");
+
+    // Auto-focus on name field
+    document.getElementById("name").focus();
+  });
+</script>
+{% endblock %}

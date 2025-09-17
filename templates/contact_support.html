@@ -1,0 +1,616 @@
+{% extends "base.html" %} {% block title %}Contact Support - ProfileMint{%
+endblock %} {% block content %}
+
+<style>
+  .support-option-card {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    background: #fff;
+    height: 100%;
+  }
+
+  .support-option-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border-color: rgba(13, 110, 253, 0.2);
+  }
+
+  .support-icon {
+    transition: all 0.3s ease;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .support-option-card:hover .support-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  .urgent-section {
+    background: linear-gradient(135deg, #fff8f8, #ffe6e6);
+    border-left: 4px solid #dc3545;
+    border-radius: 16px;
+    padding: 30px;
+  }
+
+  .faq-search {
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: linear-gradient(
+      135deg,
+      rgba(13, 110, 253, 0.1),
+      rgba(13, 110, 253, 0.05)
+    );
+    color: #0d6efd;
+    font-weight: 600;
+    box-shadow: none;
+  }
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, 0.25);
+  }
+
+  .accordion-item {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  #supportForm {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+  }
+
+  .btn-mint {
+    background: linear-gradient(135deg, #198754, #20c997);
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4);
+    background: linear-gradient(135deg, #157347, #19a97d);
+  }
+
+  .card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  .card-body {
+    padding: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .support-option-card {
+      margin-bottom: 20px;
+    }
+
+    #supportForm {
+      padding: 20px;
+    }
+
+    .urgent-section {
+      padding: 20px;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-5">
+          <div class="text-center mb-5">
+            <h1 class="h2 fw-bold mb-3">Contact Support</h1>
+            <p class="text-muted lead">
+              We're here to help you with any questions or issues you might
+              have.
+            </p>
+          </div>
+
+          <!-- Support Options Cards -->
+          <div class="row mb-5">
+            <div class="col-md-4 text-center mb-4">
+              <div class="support-option-card p-4 h-100">
+                <div
+                  class="bg-primary bg-opacity-10 rounded-circle p-3 mx-auto mb-3 support-icon"
+                >
+                  <i class="fas fa-envelope fa-2x text-primary"></i>
+                </div>
+                <h5 class="fw-bold">Email Us</h5>
+                <p class="text-muted mb-2">support@profilemint.com</p>
+                <p class="text-muted small">
+                  For urgent issues: evilb1310@gmail.com
+                </p>
+                <small class="text-muted d-block mb-3"
+                  >Typically replies within 24 hours</small
+                >
+                <a
+                  href="mailto:support@profilemint.com"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="fas fa-paper-plane me-1"></i>Send Email
+                </a>
+              </div>
+            </div>
+
+            <div class="col-md-4 text-center mb-4">
+              <div class="support-option-card p-4 h-100">
+                <div
+                  class="bg-success bg-opacity-10 rounded-circle p-3 mx-auto mb-3 support-icon"
+                >
+                  <i class="fas fa-phone fa-2x text-success"></i>
+                </div>
+                <h5 class="fw-bold">Call Us</h5>
+                <p class="text-muted mb-2">+1 (555) 123-4567</p>
+                <p class="text-muted small">Direct line: 7019670262</p>
+                <small class="text-muted d-block mb-3"
+                  >Mon-Fri, 9AM-5PM EST</small
+                >
+                <a
+                  href="tel:+15551234567"
+                  class="btn btn-sm btn-outline-success"
+                >
+                  <i class="fas fa-phone me-1"></i>Call Now
+                </a>
+              </div>
+            </div>
+
+            <div class="col-md-4 text-center mb-4">
+              <div class="support-option-card p-4 h-100">
+                <div
+                  class="bg-info bg-opacity-10 rounded-circle p-3 mx-auto mb-3 support-icon"
+                >
+                  <i class="fas fa-comments fa-2x text-info"></i>
+                </div>
+                <h5 class="fw-bold">Live Chat</h5>
+                <p class="text-muted mb-2">Available 24/7</p>
+                <small class="text-muted d-block mb-3"
+                  >Click the chat icon in the corner</small
+                >
+                <button class="btn btn-sm btn-outline-info" id="startLiveChat">
+                  <i class="fas fa-comment me-1"></i>Start Chat
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Section -->
+          <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h3 class="h4 fw-bold mb-0">Frequently Asked Questions</h3>
+              <div class="input-group faq-search" style="max-width: 300px">
+                <span class="input-group-text bg-transparent">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search FAQs..."
+                  id="faqSearch"
+                />
+              </div>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq1"
+                  >
+                    <i class="fas fa-question-circle me-2 text-primary"></i>
+                    How do I reset my password?
+                  </button>
+                </h2>
+                <div
+                  id="faq1"
+                  class="accordion-collapse collapse show"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    You can reset your password by clicking on the "Forgot
+                    Password" link on the login page. We'll send you an email
+                    with instructions to reset your password.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq2"
+                  >
+                    <i class="fas fa-question-circle me-2 text-primary"></i>
+                    How do I download my resume as PDF?
+                  </button>
+                </h2>
+                <div
+                  id="faq2"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    After creating your resume, go to "My Resumes", click on the
+                    resume you want to download, and then click the "Download"
+                    button. You can choose PDF format from the options.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq3"
+                  >
+                    <i class="fas fa-question-circle me-2 text-primary"></i>
+                    Can I edit my resume after creating it?
+                  </button>
+                </h2>
+                <div
+                  id="faq3"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    Yes, you can edit your resume at any time. Go to "My
+                    Resumes", click on the resume you want to edit, and then
+                    click the "Edit" button. Make your changes and save them.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Additional FAQs -->
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq4"
+                  >
+                    <i class="fas fa-question-circle me-2 text-primary"></i>
+                    How do I upgrade to a premium account?
+                  </button>
+                </h2>
+                <div
+                  id="faq4"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    To upgrade to premium, go to your Account Settings and click
+                    on the "Upgrade" tab. You can choose from our monthly or
+                    annual subscription plans. All major credit cards are
+                    accepted.
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq5"
+                  >
+                    <i class="fas fa-question-circle me-2 text-primary"></i>
+                    Is my personal information secure?
+                  </button>
+                </h2>
+                <div
+                  id="faq5"
+                  class="accordion-collapse collapse"
+                  data-bs-parent="#faqAccordion"
+                >
+                  <div class="accordion-body">
+                    Yes, we take security seriously. All your data is encrypted
+                    and we never share your personal information with third
+                    parties without your consent. You can read our full privacy
+                    policy in the footer section.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Urgent Issues Section -->
+          <div class="urgent-section mb-5 p-4 rounded">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-exclamation-triangle fa-2x text-danger me-3"></i>
+              <h3 class="h4 fw-bold mb-0 text-danger">Urgent Issues Contact</h3>
+            </div>
+            <p class="text-muted mb-3">
+              For urgent matters, contact:
+              <strong class="text-danger">evilb1310@gmail.com</strong>
+            </p>
+
+            <div class="mb-3">
+              <label for="problematicQuestion" class="form-label fw-bold"
+                >Select a question to send:</label
+              >
+              <select class="form-select" id="problematicQuestion">
+                <option selected disabled>Choose a question...</option>
+                <option
+                  value="I can't access my account, is there a security breach?"
+                >
+                  I can't access my account, is there a security breach?
+                </option>
+                <option
+                  value="Why is my personal data showing up in someone else's profile?"
+                >
+                  Why is my personal data showing up in someone else's profile?
+                </option>
+                <option
+                  value="I noticed suspicious activity on my account, what should I do?"
+                >
+                  I noticed suspicious activity on my account, what should I do?
+                </option>
+                <option value="Why did my payment get processed twice?">
+                  Why did my payment get processed twice?
+                </option>
+                <option
+                  value="How do I permanently delete my account and all my data?"
+                >
+                  How do I permanently delete my account and all my data?
+                </option>
+              </select>
+            </div>
+
+            <div class="d-grid">
+              <button id="sendProblematicQuestion" class="btn btn-danger">
+                <i class="fas fa-paper-plane me-2"></i>Send Urgent Question
+              </button>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form-section">
+            <div class="text-center mb-4">
+              <h3 class="h4 fw-bold">Send us a Message</h3>
+              <p class="text-muted">
+                Fill out the form below and we'll get back to you as soon as
+                possible
+              </p>
+            </div>
+
+            <form
+              method="POST"
+              action="{{ url_for('contact_support') }}"
+              id="supportForm"
+            >
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="name" class="form-label">Your Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <select
+                  class="form-select"
+                  id="subject"
+                  name="subject"
+                  required
+                >
+                  <option value="" disabled selected>Select a subject</option>
+                  <option value="Account Issue">Account Issue</option>
+                  <option value="Billing Question">Billing Question</option>
+                  <option value="Technical Problem">Technical Problem</option>
+                  <option value="Feature Request">Feature Request</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea
+                  class="form-control"
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder="Please describe your issue in detail..."
+                  required
+                ></textarea>
+                <div class="form-text">
+                  Character count: <span id="charCount">0</span>/1000
+                </div>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-mint btn-lg">
+                  <i class="fas fa-paper-plane me-2"></i>Send Message
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .support-option-card {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .support-option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .support-icon {
+    transition: all 0.3s ease;
+  }
+
+  .support-option-card:hover .support-icon {
+    transform: scale(1.1);
+  }
+
+  .urgent-section {
+    background-color: #fff8f8;
+    border-left: 4px solid #dc3545;
+  }
+
+  .faq-search {
+    border-radius: 50px;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
+  }
+
+  #supportForm {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sendButton = document.getElementById("sendProblematicQuestion");
+    const questionSelect = document.getElementById("problematicQuestion");
+    const faqSearch = document.getElementById("faqSearch");
+    const messageTextarea = document.getElementById("message");
+    const charCount = document.getElementById("charCount");
+    const startChatBtn = document.getElementById("startLiveChat");
+
+    // Urgent question functionality
+    sendButton.addEventListener("click", function () {
+      if (questionSelect.value) {
+        // In a real implementation, this would send the question to the email
+        // For demonstration, we'll show a confirmation message
+        alert(
+          `Your question has been sent to evilb1310@gmail.com:\n\n"${questionSelect.value}"`
+        );
+
+        // Reset the selection
+        questionSelect.selectedIndex = 0;
+      } else {
+        alert("Please select a question first.");
+      }
+    });
+
+    // FAQ search functionality
+    faqSearch.addEventListener("input", function () {
+      const searchTerm = this.value.toLowerCase();
+      const accordionItems = document.querySelectorAll(".accordion-item");
+
+      accordionItems.forEach((item) => {
+        const question = item
+          .querySelector(".accordion-button")
+          .textContent.toLowerCase();
+        const answer = item
+          .querySelector(".accordion-body")
+          .textContent.toLowerCase();
+
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          item.style.display = "block";
+          // Open the accordion if it matches
+          const collapseId = item
+            .querySelector(".accordion-button")
+            .getAttribute("data-bs-target");
+          const collapseElement = document.querySelector(collapseId);
+          new bootstrap.Collapse(collapseElement, { toggle: true });
+        } else {
+          item.style.display = "none";
+        }
+      });
+    });
+
+    // Character count for message textarea
+    messageTextarea.addEventListener("input", function () {
+      const length = this.value.length;
+      charCount.textContent = length;
+
+      if (length > 1000) {
+        charCount.classList.add("text-danger");
+      } else {
+        charCount.classList.remove("text-danger");
+      }
+    });
+
+    // Live chat simulation
+    startChatBtn.addEventListener("click", function () {
+      const chatAvailable = Math.random() > 0.3; // 70% chance chat is available
+
+      if (chatAvailable) {
+        // Simulate chat connection
+        this.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Connecting...';
+        this.classList.remove("btn-outline-info");
+        this.classList.add("btn-info");
+
+        setTimeout(() => {
+          alert("Chat connected! A support agent will be with you shortly.");
+          this.innerHTML = '<i class="fas fa-comment me-1"></i>Chat Started';
+        }, 1500);
+      } else {
+        alert(
+          "Sorry, all our support agents are currently busy. Please try again in a few minutes or send us an email."
+        );
+      }
+    });
+  });
+</script>
+{% endblock %}

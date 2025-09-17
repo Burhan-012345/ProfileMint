@@ -1,0 +1,265 @@
+<!-- templates/verify_2fa.html -->
+{% extends "base.html" %} {% block title %}Verify Two-Factor Authentication -
+ProfileMint{% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+            <h2 class="h3 fw-bold">Two-Factor Authentication</h2>
+            <p class="text-muted">
+              Enter the verification code from your authenticator app
+            </p>
+          </div>
+
+          <form id="verify2faForm" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="mb-4">
+              <label for="verificationCode" class="form-label fw-semibold">
+                Verification Code
+              </label>
+              <input
+                type="text"
+                class="form-control form-control-lg text-center"
+                id="verificationCode"
+                name="code"
+                placeholder="000000"
+                maxlength="6"
+                inputmode="numeric"
+                pattern="[0-9]{6}"
+                required
+                autocomplete="one-time-code"
+                autofocus
+              />
+              <div class="form-text">
+                Enter the 6-digit code from your authenticator app
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+              <i class="fas fa-check-circle me-2"></i>
+              Verify & Continue
+            </button>
+
+            <div class="text-center">
+              <a href="#" class="text-decoration-none" id="useBackupCode">
+                <i class="fas fa-key me-1"></i>
+                Use backup code instead
+              </a>
+            </div>
+          </form>
+
+          <!-- Backup Code Section (hidden by default) -->
+          <div id="backupCodeSection" class="mt-4" style="display: none">
+            <hr />
+            <h5 class="mb-3">Use Backup Code</h5>
+            <form id="backupCodeForm">
+              <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+              />
+
+              <div class="mb-3">
+                <label for="backupCode" class="form-label">Backup Code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="backupCode"
+                  name="backup_code"
+                  placeholder="Enter your backup code"
+                  required
+                />
+                <div class="form-text">
+                  Each backup code can be used only once
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-outline-primary w-100">
+                Use Backup Code
+              </button>
+            </form>
+          </div>
+
+          <!-- Help Section -->
+          <div class="mt-4 p-3 bg-light rounded">
+            <h6 class="fw-semibold mb-2">
+              <i class="fas fa-question-circle me-1"></i>
+              Need help?
+            </h6>
+            <p class="small mb-2">If you're having trouble with 2FA:</p>
+            <ul class="small ps-3 mb-0">
+              <li>Make sure your authenticator app time is synchronized</li>
+              <li>Check that you're entering the current code</li>
+              <li>
+                Use a backup code if you lost access to your authenticator
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Tips -->
+      <div class="text-center mt-4">
+        <p class="small text-muted">
+          <i class="fas fa-lock me-1"></i>
+          Two-factor authentication adds an extra layer of security to your
+          account
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const verifyForm = document.getElementById("verify2faForm");
+    const backupCodeSection = document.getElementById("backupCodeSection");
+    const useBackupCodeLink = document.getElementById("useBackupCode");
+    const backupCodeForm = document.getElementById("backupCodeForm");
+    const verificationCodeInput = document.getElementById("verificationCode");
+
+    // Format verification code input
+    verificationCodeInput.addEventListener("input", function (e) {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length > 6) value = value.slice(0, 6);
+      e.target.value = value;
+    });
+
+    // Toggle backup code section
+    useBackupCodeLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      backupCodeSection.style.display =
+        backupCodeSection.style.display === "none" ? "block" : "none";
+    });
+
+    // Handle verification form submission
+    verifyForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const submitButton = this.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+
+      submitButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status"></span> Verifying...';
+      submitButton.disabled = true;
+
+      try {
+        const formData = new FormData(this);
+        const response = await fetch("{{ url_for('verify_2fa_code') }}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": formData.get("csrf_token"),
+          },
+          body: JSON.stringify({
+            code: formData.get("code"),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          window.location.href = "{{ url_for('dashboard') }}";
+        } else {
+          alert("Error: " + (data.error || "Invalid verification code"));
+          verificationCodeInput.focus();
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      } finally {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+      }
+    });
+
+    // Handle backup code form submission
+    backupCodeForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const submitButton = this.querySelector('button[type="submit"]');
+      const originalText = submitButton.innerHTML;
+
+      submitButton.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status"></span> Verifying...';
+      submitButton.disabled = true;
+
+      try {
+        const formData = new FormData(this);
+        const response = await fetch("{{ url_for('verify_backup_code') }}", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": formData.get("csrf_token"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            backup_code: formData.get("backup_code"),
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          window.location.href = "{{ url_for('dashboard') }}";
+        } else {
+          alert("Error: " + (data.error || "Invalid backup code"));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      } finally {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  /* verify_2fa.html */
+  .card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    background: #f0f4f8; /* Light navy blue background */
+  }
+
+  .verification-input {
+    font-size: 1.8rem;
+    letter-spacing: 15px;
+    font-weight: bold;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+  }
+
+  .verification-input:focus {
+    border-color: #64ffda;
+    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+    background: white;
+  }
+
+  .btn-primary {
+    background: linear-gradient(145deg, #0a192f, #64ffda);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+  }
+
+  .bg-light {
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef) !important;
+    border-radius: 12px;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,797 @@
+{% extends "base.html" %} {% block title %}Privacy Policy - ProfileMint{%
+endblock %} {% block content %}
+
+<style>
+  .privacy-content h2 {
+    border-bottom: 2px solid #64ffda;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .list-group-item {
+    border: none;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .list-group-item:hover {
+    border-left-color: #64ffda;
+    background-color: rgba(100, 255, 218, 0.1);
+    transform: translateX(5px);
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: linear-gradient(
+      135deg,
+      rgba(100, 255, 218, 0.15) 0%,
+      rgba(0, 188, 212, 0.15) 100%
+    );
+    color: #0a192f;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.2);
+  }
+
+  .accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(100, 255, 218, 0.25);
+    border-color: #64ffda;
+  }
+
+  .alert-info {
+    background: linear-gradient(
+      135deg,
+      rgba(13, 202, 240, 0.15) 0%,
+      rgba(13, 202, 240, 0.05) 100%
+    );
+    border: 1px solid rgba(13, 202, 240, 0.2);
+    border-radius: 12px;
+  }
+
+  .alert-warning {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 193, 7, 0.15) 0%,
+      rgba(255, 193, 7, 0.05) 100%
+    );
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    border-radius: 12px;
+  }
+
+  .card.bg-light {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: none;
+    border-radius: 16px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .btn-outline-mint {
+    color: #64ffda;
+    border: 2px solid #64ffda;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-mint:hover {
+    background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+    color: #0a192f;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(100, 255, 218, 0.3);
+  }
+
+  .text-mint {
+    color: #64ffda !important;
+    transition: all 0.3s ease;
+  }
+
+  .text-mint:hover {
+    color: #00bcd4 !important;
+    text-decoration: underline;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .form-check-input:checked {
+    background-color: #64ffda;
+    border-color: #64ffda;
+  }
+
+  .form-switch .form-check-input:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2364ffda'/%3e%3c/svg%3e");
+  }
+</style>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-5">
+            <div class="mb-3">
+              <i class="fas fa-shield-alt fa-3x text-mint"></i>
+            </div>
+            <h1 class="h2 fw-bold mb-2">Privacy Policy</h1>
+            <p class="text-muted">
+              Last updated: <span id="currentYear">{{ current_year }}</span>
+            </p>
+          </div>
+
+          <div class="privacy-content">
+            <div class="mb-5">
+              <p class="lead">
+                At ProfileMint, we take your privacy seriously. This Privacy
+                Policy describes how we collect, use, and share your personal
+                information when you use our website and services.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-info-circle text-mint"></i
+                ></span>
+                <span>1. Information We Collect</span>
+              </h2>
+              <p>
+                We collect information you provide directly to us, including:
+              </p>
+              <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-user-circle text-mint me-2"></i>
+                  <strong>Account information:</strong> Name, email address,
+                  password, and other details you provide when creating an
+                  account
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-file-alt text-mint me-2"></i>
+                  <strong>Resume information:</strong> The content you include
+                  in your resumes, such as work experience, education, skills,
+                  and contact information
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-credit-card text-mint me-2"></i>
+                  <strong>Payment information:</strong> If you purchase a
+                  premium subscription, we collect payment information through
+                  our secure payment processors
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-comments text-mint me-2"></i>
+                  <strong>Communications:</strong> Information you provide when
+                  contacting our support team
+                </li>
+              </ul>
+
+              <p>
+                We also automatically collect certain information about your
+                device and usage of our Services:
+              </p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-network-wired text-mint me-2"></i>
+                  <strong>Log information:</strong> IP address, browser type,
+                  pages visited, and other usage statistics
+                </li>
+                <li class="list-group-item bg-transparent ps-0">
+                  <i class="fas fa-cookie text-mint me-2"></i>
+                  <strong>Cookies and similar technologies:</strong> Information
+                  about your preferences and session information
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-cogs text-mint"></i></span>
+                <span>2. How We Use Your Information</span>
+              </h2>
+              <p>We use the information we collect to:</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Provide, maintain, and improve our Services
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Create and manage your account
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Process your transactions and send related information
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i> Send
+                      you technical notices, updates, security alerts, and
+                      support messages
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Respond to your comments, questions, and requests
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Monitor and analyze trends, usage, and activities
+                    </li>
+                    <li class="mb-2">
+                      <i class="fas fa-check-circle text-success me-2"></i>
+                      Detect, investigate, and prevent fraudulent transactions
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-share-alt text-mint"></i
+                ></span>
+                <span>3. How We Share Your Information</span>
+              </h2>
+              <p>
+                We may share your personal information in the following
+                situations:
+              </p>
+              <div class="accordion" id="sharingAccordion">
+                <div class="accordion-item">
+                  <h3 class="accordion-header" id="headingOne">
+                    <button
+                      class="accordion-button"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseOne"
+                      aria-expanded="true"
+                      aria-controls="collapseOne"
+                    >
+                      With service providers
+                    </button>
+                  </h3>
+                  <div
+                    id="collapseOne"
+                    class="accordion-collapse collapse show"
+                    aria-labelledby="headingOne"
+                    data-bs-parent="#sharingAccordion"
+                  >
+                    <div class="accordion-body">
+                      We share information with service providers who need
+                      access to such information to carry out work on our
+                      behalf.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header" id="headingTwo">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="collapseTwo"
+                    >
+                      Legal requirements
+                    </button>
+                  </h3>
+                  <div
+                    id="collapseTwo"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingTwo"
+                    data-bs-parent="#sharingAccordion"
+                  >
+                    <div class="accordion-body">
+                      In response to a request for information if we believe
+                      disclosure is in accordance with any applicable law,
+                      regulation, or legal process.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header" id="headingThree">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseThree"
+                      aria-expanded="false"
+                      aria-controls="collapseThree"
+                    >
+                      Protection of rights
+                    </button>
+                  </h3>
+                  <div
+                    id="collapseThree"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingThree"
+                    data-bs-parent="#sharingAccordion"
+                  >
+                    <div class="accordion-body">
+                      If we believe your actions are inconsistent with our user
+                      agreements or policies, or to protect the rights,
+                      property, and safety of ProfileMint or others.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header" id="headingFour">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseFour"
+                      aria-expanded="false"
+                      aria-controls="collapseFour"
+                    >
+                      Business transfers
+                    </button>
+                  </h3>
+                  <div
+                    id="collapseFour"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingFour"
+                    data-bs-parent="#sharingAccordion"
+                  >
+                    <div class="accordion-body">
+                      In connection with, or during negotiations of, any merger,
+                      sale of company assets, financing, or acquisition of all
+                      or a portion of our business by another company.
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header" id="headingFive">
+                    <button
+                      class="accordion-button collapsed"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseFive"
+                      aria-expanded="false"
+                      aria-controls="collapseFive"
+                    >
+                      With your consent
+                    </button>
+                  </h3>
+                  <div
+                    id="collapseFive"
+                    class="accordion-collapse collapse"
+                    aria-labelledby="headingFive"
+                    data-bs-parent="#sharingAccordion"
+                  >
+                    <div class="accordion-body">
+                      With your consent or at your direction.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle me-2"></i> We do not sell your
+                personal information to third parties.
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-database text-mint"></i
+                ></span>
+                <span>4. Data Retention</span>
+              </h2>
+              <p>
+                We store the information we collect about you for as long as
+                necessary for the purpose(s) for which we collected it, and in
+                accordance with our legal obligations and legitimate business
+                interests.
+              </p>
+              <p>
+                You can delete your account at any time by contacting us. When
+                you delete your account, we will delete your personal
+                information, except for information we are required to retain
+                for legal, regulatory, or security purposes.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-user-check text-mint"></i
+                ></span>
+                <span>5. Your Rights</span>
+              </h2>
+              <p>
+                Depending on your location, you may have the following rights
+                regarding your personal information:
+              </p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-eye text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Access</h5>
+                      <p class="mb-0">
+                        Access and receive a copy of your personal information
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-edit text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Correction</h5>
+                      <p class="mb-0">
+                        Correct inaccurate or incomplete personal information
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-trash-alt text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Deletion</h5>
+                      <p class="mb-0">Delete your personal information</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-ban text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Restriction</h5>
+                      <p class="mb-0">
+                        Restrict or object to our processing of your personal
+                        information
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-file-export text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Data Portability</h5>
+                      <p class="mb-0">
+                        Receive your data in a structured, commonly used format
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex mb-3">
+                    <div class="flex-shrink-0">
+                      <i class="fas fa-times-circle text-mint fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                      <h5 class="mt-0">Withdraw Consent</h5>
+                      <p class="mb-0">
+                        Withdraw consent at any time, where we rely on consent
+                        to process your personal information
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p>
+                To exercise any of these rights, please contact us at
+                <a
+                  href="mailto:privacy@profilemint.com"
+                  class="text-mint text-decoration-none"
+                  >privacy@profilemint.com</a
+                >.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-cookie-bite text-mint"></i
+                ></span>
+                <span>6. Cookies and Tracking Technologies</span>
+              </h2>
+              <p>
+                We use cookies and similar tracking technologies to track
+                activity on our Service and hold certain information. Cookies
+                are files with a small amount of data which may include an
+                anonymous unique identifier.
+              </p>
+              <p>
+                You can instruct your browser to refuse all cookies or to
+                indicate when a cookie is being sent. However, if you do not
+                accept cookies, you may not be able to use some portions of our
+                Service.
+              </p>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">Cookie Preferences</h5>
+                  <p class="card-text">
+                    Manage your cookie preferences directly from your browser
+                    settings or using our cookie consent tool.
+                  </p>
+                  <button
+                    class="btn btn-outline-mint btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#cookieModal"
+                  >
+                    Learn More About Cookies
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-lock text-mint"></i></span>
+                <span>7. Data Security</span>
+              </h2>
+              <p>
+                We implement appropriate technical and organizational measures
+                to protect your personal information against accidental or
+                unlawful destruction, loss, change, or damage. All personal
+                information is stored on secure servers and is encrypted in
+                transit.
+              </p>
+              <p>
+                However, no method of transmission over the Internet or
+                electronic storage is 100% secure. While we strive to use
+                commercially acceptable means to protect your personal
+                information, we cannot guarantee its absolute security.
+              </p>
+              <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i> Always ensure
+                you're using a secure connection when accessing your account and
+                never share your password with others.
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"><i class="fas fa-child text-mint"></i></span>
+                <span>8. Children's Privacy</span>
+              </h2>
+              <p>
+                Our Service is not intended for use by children under the age of
+                16. We do not knowingly collect personal information from
+                children under 16. If we become aware that we have collected
+                personal information from a child under age 16 without
+                verification of parental consent, we take steps to remove that
+                information from our servers.
+              </p>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-sync-alt text-mint"></i
+                ></span>
+                <span>9. Changes to This Privacy Policy</span>
+              </h2>
+              <p>
+                We may update our Privacy Policy from time to time. We will
+                notify you of any changes by posting the new Privacy Policy on
+                this page and updating the "Last updated" date.
+              </p>
+              <p>
+                You are advised to review this Privacy Policy periodically for
+                any changes. Changes to this Privacy Policy are effective when
+                they are posted on this page.
+              </p>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">Change Notification</h5>
+                  <p class="card-text">
+                    Sign up to receive notifications about important changes to
+                    our Privacy Policy.
+                  </p>
+                  <div class="input-group">
+                    <input
+                      type="email"
+                      class="form-control"
+                      placeholder="Your email address"
+                    />
+                    <button class="btn btn-mint" type="button">
+                      Subscribe
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-5">
+              <h2 class="h4 fw-bold mb-3 d-flex align-items-center">
+                <span class="me-2"
+                  ><i class="fas fa-envelope text-mint"></i
+                ></span>
+                <span>10. Contact Us</span>
+              </h2>
+              <p>
+                If you have any questions about this Privacy Policy, please
+                contact us:
+              </p>
+              <ul class="list-unstyled">
+                <li class="mb-2">
+                  <i class="fas fa-envelope text-mint me-2"></i>
+                  <strong>Email:</strong>
+                  <a
+                    href="mailto:privacy@profilemint.com"
+                    class="text-mint text-decoration-none"
+                    >privacy@profilemint.com</a
+                  >
+                </li>
+                <li class="mb-2">
+                  <i class="fas fa-map-marker-alt text-mint me-2"></i>
+                  <strong>Address:</strong> 123 Privacy Lane, Data Protection
+                  City, DP 10101
+                </li>
+                <li>
+                  <i class="fas fa-clock text-mint me-2"></i>
+                  <strong>Response Time:</strong> We aim to respond to all
+                  inquiries within 48 hours
+                </li>
+              </ul>
+            </div>
+
+            <div class="text-center mt-5 pt-4 border-top">
+              <p class="text-muted">
+                This document was last updated on
+                <span id="currentDate">{{ current_date }}</span>
+              </p>
+              <button
+                class="btn btn-outline-secondary me-2"
+                onclick="window.print()"
+              >
+                <i class="fas fa-print me-1"></i> Print Policy
+              </button>
+              <button class="btn btn-outline-mint" id="downloadPdf">
+                <i class="fas fa-download me-1"></i> Download as PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Modal -->
+<div
+  class="modal fade"
+  id="cookieModal"
+  tabindex="-1"
+  aria-labelledby="cookieModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cookieModalLabel">Cookie Policy</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>We use different types of cookies on our website:</p>
+
+        <h6>Essential Cookies</h6>
+        <p>
+          These cookies are necessary for the website to function and cannot be
+          switched off in our systems.
+        </p>
+
+        <h6>Performance Cookies</h6>
+        <p>
+          These cookies allow us to count visits and traffic sources so we can
+          measure and improve the performance of our site.
+        </p>
+
+        <h6>Functional Cookies</h6>
+        <p>
+          These enable the website to provide enhanced functionality and
+          personalization.
+        </p>
+
+        <h6>Targeting Cookies</h6>
+        <p>
+          These cookies may be set through our site by our advertising partners.
+        </p>
+
+        <div class="form-check form-switch mt-4">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="essentialCookies"
+            checked
+            disabled
+          />
+          <label class="form-check-label" for="essentialCookies"
+            >Essential Cookies (Required)</label
+          >
+        </div>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="performanceCookies"
+            checked
+          />
+          <label class="form-check-label" for="performanceCookies"
+            >Performance Cookies</label
+          >
+        </div>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="functionalCookies"
+            checked
+          />
+          <label class="form-check-label" for="functionalCookies"
+            >Functional Cookies</label
+          >
+        </div>
+        <div class="form-check form-switch">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="targetingCookies"
+          />
+          <label class="form-check-label" for="targetingCookies"
+            >Targeting Cookies</label
+          >
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-mint" data-bs-dismiss="modal">
+          Save Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Set current year and date
+  document.getElementById("currentYear").textContent = new Date().getFullYear();
+  document.getElementById("currentDate").textContent =
+    new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+
+  // PDF download functionality (pseudo-code)
+  document.getElementById("downloadPdf").addEventListener("click", function () {
+    // This would typically connect to a server-side endpoint to generate a PDF
+    alert(
+      "This would download the Privacy Policy as a PDF file. In a real implementation, this would connect to a PDF generation service."
+    );
+  });
+</script>
+{% endblock %}

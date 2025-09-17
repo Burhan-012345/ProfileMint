@@ -1,0 +1,353 @@
+{% extends "base.html" %} {% block title %}Verify OTP - ProfileMint{% endblock
+%} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="auth-card card border-0 shadow-sm">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <div class="otp-icon mb-3">
+              <i class="fas fa-envelope-circle-check fa-3x text-mint"></i>
+            </div>
+            <h1 class="h2 fw-bold mb-2">Verify Your Email</h1>
+            <p class="text-muted">
+              We've sent a 6-digit verification code to your email address.
+            </p>
+          </div>
+
+          <form
+            method="POST"
+            action="{{ url_for('verify_registration_otp') }}"
+            novalidate
+          >
+            <div class="mb-4">
+              <label for="otp" class="form-label">Verification Code</label>
+              <div class="otp-input-container">
+                <input
+                  type="text"
+                  class="form-control form-control-lg text-center otp-input"
+                  id="otp"
+                  name="otp"
+                  maxlength="6"
+                  pattern="[0-9]{6}"
+                  placeholder="• • • • • •"
+                  required
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                />
+              </div>
+              <div class="invalid-feedback">
+                Please enter the 6-digit code sent to your email.
+              </div>
+              <div class="form-text text-center mt-3">
+                <i class="fas fa-clock me-1"></i>Code expires in
+                <span id="countdown">10:00</span>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+              <button type="submit" class="btn btn-mint btn-lg py-3">
+                <i class="fas fa-check-circle me-2"></i>Verify & Continue
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center">
+            <p class="text-muted mb-2">Didn't receive the code?</p>
+            <a
+              href="{{ url_for('resend_otp') }}"
+              class="btn btn-outline-mint btn-sm"
+              id="resend-btn"
+              disabled
+            >
+              <span id="resend-text">Resend code</span>
+              <span id="resend-timer" class="d-none">(00:60)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const otpInput = document.getElementById("otp");
+    const form = document.querySelector("form");
+    const countdownEl = document.getElementById("countdown");
+    const resendBtn = document.getElementById("resend-btn");
+    const resendText = document.getElementById("resend-text");
+    const resendTimer = document.getElementById("resend-timer");
+
+    let countdown = 600; // 10 minutes in seconds
+    let resendCountdown = 60; // 60 seconds before allowing resend
+
+    // Start expiration countdown
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      const minutes = Math.floor(countdown / 60);
+      const seconds = countdown % 60;
+      countdownEl.textContent = `${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+      if (countdown <= 0) {
+        clearInterval(countdownInterval);
+        countdownEl.textContent = "Expired!";
+        countdownEl.classList.add("text-danger");
+        // Optionally clear the input or show a message
+      }
+    }, 1000);
+
+    // Start resend countdown
+    const resendInterval = setInterval(() => {
+      resendCountdown--;
+      resendTimer.textContent = `(${resendCountdown
+        .toString()
+        .padStart(2, "0")})`;
+
+      if (resendCountdown <= 0) {
+        clearInterval(resendInterval);
+        resendBtn.disabled = false;
+        resendText.classList.remove("d-none");
+        resendTimer.classList.add("d-none");
+      }
+    }, 1000);
+
+    // Form validation
+    form.addEventListener("submit", function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add("was-validated");
+    });
+
+    // Auto-focus on OTP field
+    otpInput.focus();
+
+    // Enhanced OTP input handling
+    otpInput.addEventListener("input", function (e) {
+      // Remove any non-digit characters
+      this.value = this.value.replace(/\D/g, "");
+
+      // Add visual feedback for each digit
+      const digits = this.value.split("");
+
+      // Auto-submit when 6 digits are entered
+      if (this.value.length === 6) {
+        // Add a slight delay for better UX
+        setTimeout(() => {
+          form.submit();
+        }, 100);
+      }
+    });
+
+    // Allow pasting and auto-format
+    otpInput.addEventListener("paste", function (e) {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      const numbers = text.replace(/\D/g, "");
+      this.value = numbers.slice(0, 6);
+
+      if (this.value.length === 6) {
+        setTimeout(() => {
+          form.submit();
+        }, 100);
+      }
+    });
+
+    // Keyboard navigation
+    otpInput.addEventListener("keydown", function (e) {
+      // Allow only numbers and control keys
+      if (!/^\d$|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    // Resend OTP functionality
+    resendBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (!this.disabled) {
+        // Show loading state
+        const originalHtml = this.innerHTML;
+        this.innerHTML =
+          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+        this.disabled = true;
+
+        // Simulate API call
+        fetch("{{ url_for('resend_otp') }}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Show success message
+              showToast("New code sent to your email!", "success");
+
+              // Reset countdowns
+              countdown = 600;
+              resendCountdown = 60;
+              resendBtn.disabled = true;
+              resendText.classList.add("d-none");
+              resendTimer.classList.remove("d-none");
+
+              // Restart countdowns
+              startCountdowns();
+            } else {
+              showToast("Error sending code. Please try again.", "error");
+              this.innerHTML = originalHtml;
+              this.disabled = false;
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            showToast("Error sending code. Please try again.", "error");
+            this.innerHTML = originalHtml;
+            this.disabled = false;
+          });
+      }
+    });
+
+    function startCountdowns() {
+      // Restart expiration countdown
+      clearInterval(countdownInterval);
+      setInterval(() => {
+        countdown--;
+        const minutes = Math.floor(countdown / 60);
+        const seconds = countdown % 60;
+        countdownEl.textContent = `${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+        if (countdown <= 0) {
+          countdownEl.textContent = "Expired!";
+          countdownEl.classList.add("text-danger");
+        }
+      }, 1000);
+
+      // Restart resend countdown
+      clearInterval(resendInterval);
+      setInterval(() => {
+        resendCountdown--;
+        resendTimer.textContent = `(${resendCountdown
+          .toString()
+          .padStart(2, "0")})`;
+
+        if (resendCountdown <= 0) {
+          resendBtn.disabled = false;
+          resendText.classList.remove("d-none");
+          resendTimer.classList.add("d-none");
+        }
+      }, 1000);
+    }
+
+    function showToast(message, type = "info") {
+      // Create toast element
+      const toast = document.createElement("div");
+      toast.className = `toast align-items-center text-white bg-${type} border-0`;
+      toast.setAttribute("role", "alert");
+      toast.setAttribute("aria-live", "assertive");
+      toast.setAttribute("aria-atomic", "true");
+
+      toast.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      `;
+
+      // Add to container
+      const toastContainer = document.createElement("div");
+      toastContainer.className =
+        "toast-container position-fixed top-0 end-0 p-3";
+      toastContainer.appendChild(toast);
+      document.body.appendChild(toastContainer);
+
+      // Show toast
+      const bsToast = new bootstrap.Toast(toast);
+      bsToast.show();
+
+      // Remove after hidden
+      toast.addEventListener("hidden.bs.toast", function () {
+        toastContainer.remove();
+      });
+    }
+  });
+</script>
+
+<style>
+  /* verify_registration_otp.html */
+  .auth-card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  }
+
+  .otp-icon {
+    color: #64ffda;
+    font-size: 3rem;
+  }
+
+  .otp-input-container {
+    position: relative;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  .otp-input {
+    font-size: 1.8rem;
+    letter-spacing: 15px;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+  }
+
+  .otp-input:focus {
+    border-color: #64ffda;
+    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-mint {
+    background: linear-gradient(145deg, #0a192f, #64ffda);
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+  }
+
+  .btn-outline-mint {
+    border: 2px solid #64ffda;
+    color: #64ffda;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-mint:hover {
+    background: #64ffda;
+    color: #0a192f;
+    transform: translateY(-2px);
+  }
+
+  #countdown {
+    font-weight: 700;
+    color: #0a192f;
+  }
+</style>
+{% endblock %}

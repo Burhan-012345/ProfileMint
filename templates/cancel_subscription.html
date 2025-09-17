@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cancel Subscription - ProfileMint</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .subscription-card {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+
+      .subscription-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, #fff8f8, #ffe6e6);
+        border-bottom: 2px solid #ffebee;
+        padding: 1.5rem;
+      }
+
+      .consequences-list {
+        background: linear-gradient(135deg, #fff8f8, #ffe6e6);
+        border-radius: 15px;
+        padding: 25px;
+        border-left: 4px solid #dc3545;
+      }
+
+      .consequences-list ul {
+        margin-bottom: 0;
+      }
+
+      .consequences-list li {
+        padding: 8px 0;
+        position: relative;
+        padding-left: 30px;
+        transition: all 0.3s ease;
+      }
+
+      .consequences-list li:hover {
+        transform: translateX(5px);
+      }
+
+      .consequences-list li:before {
+        content: "•";
+        color: #dc3545;
+        font-weight: bold;
+        font-size: 1.5rem;
+        position: absolute;
+        left: 10px;
+        top: 2px;
+      }
+
+      .btn-cancel {
+        padding: 12px 30px;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border: none;
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+      }
+
+      .btn-cancel:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        background: linear-gradient(135deg, #c82333, #a71e2a);
+      }
+
+      .benefits-reminder {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-left: 4px solid #0d6efd;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+
+      .alternative-options {
+        background: linear-gradient(135deg, #e8f4ff, #d4e7ff);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 30px;
+        border: 1px solid #b3d7ff;
+      }
+
+      .loading-spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #dc3545;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        color: #1a237e !important;
+      }
+
+      .bg-navy {
+        background: linear-gradient(135deg, #1a237e, #283593);
+      }
+
+      .btn-mint {
+        background: linear-gradient(145deg, #198754, #20c997);
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+      }
+
+      .btn-mint:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4);
+        color: white;
+      }
+
+      .auth-logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .alert-box {
+        border-left: 4px solid #ffc107;
+        background: linear-gradient(135deg, #fff8e6, #fff3cd);
+        border-radius: 12px;
+      }
+
+      .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+      }
+
+      .form-check-label {
+        font-weight: 500;
+      }
+
+      @media (max-width: 768px) {
+        .consequences-list {
+          padding: 20px;
+        }
+
+        .benefits-reminder,
+        .alternative-options {
+          padding: 20px;
+        }
+
+        .btn-cancel {
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex align-items-center"
+          href="{{ url_for('index') }}"
+        >
+          <div class="auth-logo mb-3 me-2">
+            <img
+              src="{{ url_for('static', filename='img/mint.png') }}"
+              alt="ProfileMint"
+              width="60"
+              height="60"
+              loading="lazy"
+            />
+          </div>
+          ProfileMint
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('contact_support') }}"
+                >Contact</a
+              >
+            </li>
+            {% if 'user_id' in session %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                My Account
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('dashboard') }}"
+                    >Dashboard</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('create_resume') }}"
+                    >Create Resume</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('my_resumes') }}"
+                    >My Resumes</a
+                  >
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="{{ url_for('logout') }}"
+                    >Logout</a
+                  >
+                </li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-mint ms-2" href="{{ url_for('register') }}"
+                >Sign Up</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container py-5">
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show"
+        role="alert"
+      >
+        <i
+          class="fas fa-{{ 'exclamation-triangle' if category == 'danger' else 'check-circle' }} me-2"
+        ></i>
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+          <form
+            id="cancelForm"
+            action="{{ url_for('cancel_subscription') }}"
+            method="POST"
+          >
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="subscription-card bg-white">
+              <div class="card-header bg-light text-center">
+                <h2 class="h3 mb-0 fw-bold text-danger">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  Cancel Subscription
+                </h2>
+              </div>
+              <div class="card-body p-4">
+                <div class="alert alert-warning" role="alert">
+                  <h5 class="alert-heading">
+                    <i class="fas fa-info-circle me-2"></i>
+                    We're sorry to see you go!
+                  </h5>
+                  <p class="mb-0">
+                    Your subscription will be canceled immediately, and you will
+                    lose access to all premium features.
+                  </p>
+                </div>
+
+                <div class="benefits-reminder">
+                  <h5 class="fw-bold mb-3">
+                    <i class="fas fa-gift me-2 text-primary"></i>
+                    You'll lose access to these premium features:
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <ul class="list-unstyled">
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          Unlimited resume downloads
+                        </li>
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          10+ premium templates
+                        </li>
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          Cover letter builder
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-md-6">
+                      <ul class="list-unstyled">
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          PDF, Word, and HTML exports
+                        </li>
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          Priority support
+                        </li>
+                        <li class="mb-2">
+                          <i class="fas fa-check-circle text-success me-2"></i>
+                          Custom color schemes
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="consequences-list mb-4">
+                  <h5 class="fw-bold mb-3 text-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    After cancellation:
+                  </h5>
+                  <ul>
+                    <li>
+                      You will immediately lose access to premium templates
+                    </li>
+                    <li>
+                      Existing resumes will remain accessible but only in basic
+                      format
+                    </li>
+                    <li>
+                      You'll immediately lose access to premium export options
+                    </li>
+                    <li>
+                      Your account will immediately revert to the free plan with
+                      limited features
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="alternative-options">
+                  <h5 class="fw-bold mb-3">
+                    <i class="fas fa-lightbulb me-2 text-warning"></i>
+                    Instead of canceling, consider:
+                  </h5>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="alternativeOptions"
+                      id="option1"
+                    />
+                    <label class="form-check-label" for="option1">
+                      <strong>Pausing your subscription</strong> for 3 months
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="alternativeOptions"
+                      id="option2"
+                    />
+                    <label class="form-check-label" for="option2">
+                      <strong>Switching to a cheaper plan</strong> with fewer
+                      features
+                    </label>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="alternativeOptions"
+                      id="option3"
+                    />
+                    <label class="form-check-label" for="option3">
+                      <strong>Contacting support</strong> if you're experiencing
+                      issues
+                    </label>
+                  </div>
+                  <a
+                    href="{{ url_for('contact_support') }}"
+                    class="btn btn-outline-primary btn-sm"
+                  >
+                    <i class="fas fa-headset me-1"></i> Contact Support
+                  </a>
+                </div>
+
+                <div class="mt-4">
+                  <h5 class="fw-bold mb-3">
+                    Please tell us why you're canceling:
+                  </h5>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cancel_reason"
+                      id="reason1"
+                      value="found_better_service"
+                      required
+                    />
+                    <label class="form-check-label" for="reason1">
+                      I found a better service
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cancel_reason"
+                      id="reason2"
+                      value="too_expensive"
+                    />
+                    <label class="form-check-label" for="reason2">
+                      It's too expensive
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cancel_reason"
+                      id="reason3"
+                      value="not_using_enough"
+                    />
+                    <label class="form-check-label" for="reason3">
+                      I'm not using it enough
+                    </label>
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cancel_reason"
+                      id="reason4"
+                      value="missing_features"
+                    />
+                    <label class="form-check-label" for="reason4">
+                      Missing features I need
+                    </label>
+                  </div>
+                  <div class="form-check mb-3">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="cancel_reason"
+                      id="reason5"
+                      value="other"
+                    />
+                    <label class="form-check-label" for="reason5">
+                      Other
+                    </label>
+                  </div>
+                  <div class="mb-3">
+                    <label for="otherReason" class="form-label"
+                      >Additional comments</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="otherReason"
+                      name="comments"
+                      rows="2"
+                      placeholder="Please share any feedback to help us improve..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="form-check mb-4">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="confirmCancel"
+                    name="confirm_cancellation"
+                    required
+                  />
+                  <label
+                    class="form-check-label text-danger fw-bold"
+                    for="confirmCancel"
+                  >
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    I understand that I will immediately lose access to premium
+                    features and this action cannot be undone
+                  </label>
+                </div>
+
+                <div
+                  class="d-flex justify-content-between align-items-center mt-4"
+                >
+                  <a
+                    href="{{ url_for('account') }}"
+                    class="btn btn-outline-secondary"
+                  >
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Go Back to Account
+                  </a>
+                  <button
+                    type="submit"
+                    class="btn btn-danger btn-cancel"
+                    id="cancelButton"
+                    disabled
+                  >
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="cancelText">Cancel Subscription</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <p class="text-muted">
+              Need help or have questions?
+              <a
+                href="{{ url_for('contact_support') }}"
+                class="text-decoration-none"
+              >
+                <i class="fas fa-headset me-1"></i> Contact our support team
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Enable cancel button when confirmation checkbox is checked
+      document
+        .getElementById("confirmCancel")
+        .addEventListener("change", function () {
+          document.getElementById("cancelButton").disabled = !this.checked;
+        });
+
+      // Handle form submission
+      document
+        .getElementById("cancelForm")
+        .addEventListener("submit", function (e) {
+          // Make sure a reason is selected
+          const reasons = document.querySelectorAll(
+            'input[name="cancel_reason"]'
+          );
+          let reasonSelected = false;
+
+          for (const reason of reasons) {
+            if (reason.checked) {
+              reasonSelected = true;
+              break;
+            }
+          }
+
+          if (!reasonSelected) {
+            e.preventDefault();
+            alert("Please select a reason for cancellation.");
+            return;
+          }
+
+          // Show loading state
+          document.getElementById("loadingSpinner").style.display =
+            "inline-block";
+          document.getElementById("cancelText").textContent = "Cancelling...";
+          document.getElementById("cancelButton").disabled = true;
+
+          // Allow form to submit normally
+        });
+
+      // Auto-dismiss alerts after 5 seconds
+      setTimeout(() => {
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach((alert) => {
+          const bsAlert = new bootstrap.Alert(alert);
+          bsAlert.close();
+        });
+      }, 5000);
+    </script>
+  </body>
+</html>

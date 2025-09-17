@@ -1,0 +1,818 @@
+{% extends "base.html" %} {% block title %}Pricing - ProfileMint{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 text-center mb-5">
+      <h1 class="display-4 fw-bold mb-3">Choose Your Perfect Plan</h1>
+      <p class="lead">
+        Unlock premium features and create standout resumes that get you hired
+        faster
+      </p>
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Demo Mode: Payments are simulated for testing purposes
+      </div>
+
+      <!-- Currency Toggle -->
+      <div class="currency-switch mb-4">
+        <button class="currency-btn active" data-currency="inr">INR ₹</button>
+        <button class="currency-btn" data-currency="usd">USD $</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Cards -->
+  <div class="row justify-content-center">
+    <!-- Free Plan -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card pricing-card h-100">
+        <div class="card-body text-center p-4">
+          <h3 class="card-title">Free Plan</h3>
+          <div class="price display-4 fw-bold mb-2">
+            <span class="price-amount" data-inr="₹0" data-usd="$0">₹0</span>
+          </div>
+          <p class="text-muted">Forever free</p>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Up to 3 resumes
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> 6 basic templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-times text-muted me-2"></i> Premium templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-times text-muted me-2"></i> Unlimited downloads
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-times text-muted me-2"></i> Priority support
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-times text-muted me-2"></i> Custom branding
+            </li>
+          </ul>
+          {% if not user.is_premium %}
+          <a
+            href="{{ url_for('create_resume') }}"
+            class="btn btn-outline-primary w-100"
+          >
+            Continue with Free
+          </a>
+          {% else %}
+          <div class="alert alert-info">You're currently on a Premium plan</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 1 Week Premium -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card pricing-card premium h-100">
+        <div class="premium-badge">POPULAR</div>
+        <div class="card-body text-center p-4">
+          <h3 class="card-title">1 Week Premium</h3>
+          <div class="price display-4 fw-bold mb-2">
+            <span class="price-amount" data-inr="₹99" data-usd="$1.99"
+              >₹99</span
+            >
+          </div>
+          <p class="text-muted">7 days full access</p>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited resumes
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> All 12+ templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited downloads
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Priority support
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Custom branding
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Export to PDF/Word
+            </li>
+          </ul>
+          {% if not user.is_premium %}
+          <button class="btn btn-mint w-100 upgrade-btn" data-plan="weekly">
+            Choose Plan
+          </button>
+          {% else %}
+          <div class="alert alert-success">
+            You're already a Premium member!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 1 Month Premium -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card pricing-card premium h-100">
+        <div class="premium-badge">BEST VALUE</div>
+        <div class="card-body text-center p-4">
+          <h3 class="card-title">1 Month Premium</h3>
+          <div class="price display-4 fw-bold mb-2">
+            <span class="price-amount" data-inr="₹299" data-usd="$5.99"
+              >₹299</span
+            >
+          </div>
+          <p class="text-muted">30 days full access</p>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited resumes
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> All 12+ templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited downloads
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Priority support
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Custom branding
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Export to PDF/Word
+            </li>
+          </ul>
+          {% if not user.is_premium %}
+          <button class="btn btn-mint w-100 upgrade-btn" data-plan="monthly">
+            Choose Plan
+          </button>
+          {% else %}
+          <div class="alert alert-success">
+            You're already a Premium member!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Months Premium -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card pricing-card premium h-100">
+        <div class="premium-badge">SAVE 40%</div>
+        <div class="card-body text-center p-4">
+          <h3 class="card-title">6 Months Premium</h3>
+          <div class="price display-4 fw-bold mb-2">
+            <span class="price-amount" data-inr="₹1499" data-usd="$24.99"
+              >₹1499</span
+            >
+          </div>
+          <p class="text-muted">180 days full access</p>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited resumes
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> All 12+ templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited downloads
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Priority support
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Custom branding
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Export to PDF/Word
+            </li>
+          </ul>
+          {% if not user.is_premium %}
+          <button
+            class="btn btn-outline-primary w-100 upgrade-btn"
+            data-plan="semiannual"
+          >
+            Choose Plan
+          </button>
+          {% else %}
+          <div class="alert alert-success">
+            You're already a Premium member!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 1 Year Premium -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card pricing-card premium h-100">
+        <div class="premium-badge">SAVE 60%</div>
+        <div class="card-body text-center p-4">
+          <h3 class="card-title">1 Year Premium</h3>
+          <div class="price display-4 fw-bold mb-2">
+            <span class="price-amount" data-inr="₹2499" data-usd="$39.99"
+              >₹2499</span
+            >
+          </div>
+          <p class="text-muted">365 days full access</p>
+          <ul class="list-unstyled mb-4">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited resumes
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> All 12+ templates
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Unlimited downloads
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Priority support
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Custom branding
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i> Export to PDF/Word
+            </li>
+          </ul>
+          {% if not user.is_premium %}
+          <button
+            class="btn btn-outline-primary w-100 upgrade-btn"
+            data-plan="annual"
+          >
+            Choose Plan
+          </button>
+          {% else %}
+          <div class="alert alert-success">
+            You're already a Premium member!
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Comparison Table -->
+  <div class="row mt-5">
+    <div class="col-12 text-center mb-5">
+      <h2 class="fw-bold">Compare Plans</h2>
+      <p class="lead">See which plan is right for you</p>
+    </div>
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Feature</th>
+              <th>Free</th>
+              <th>1 Day Trial</th>
+              <th>1 Week</th>
+              <th>1 Month</th>
+              <th>6 Months</th>
+              <th>1 Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Number of Resumes</td>
+              <td>3</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Templates</td>
+              <td>6 Basic</td>
+              <td>12+ Premium</td>
+              <td>12+ Premium</td>
+              <td>12+ Premium</td>
+              <td>12+ Premium</td>
+              <td>12+ Premium</td>
+            </tr>
+            <tr>
+              <td>PDF Downloads</td>
+              <td>Limited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+              <td>Unlimited</td>
+            </tr>
+            <tr>
+              <td>Priority Support</td>
+              <td><i class="fas fa-times text-danger"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr>
+              <td>Custom Branding</td>
+              <td><i class="fas fa-times text-danger"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+              <td><i class="fas fa-check text-success"></i></td>
+            </tr>
+            <tr>
+              <td>Export Options</td>
+              <td>PDF Only</td>
+              <td>PDF & Word</td>
+              <td>PDF & Word</td>
+              <td>PDF & Word</td>
+              <td>PDF & Word</td>
+              <td>PDF & Word</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>Free</td>
+              <td>Free</td>
+              <td>₹99</td>
+              <td>₹299</td>
+              <td>₹1499</td>
+              <td>₹2499</td>
+            </tr>
+            <tr>
+              <td>Savings</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>40%</td>
+              <td>60%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="row mt-5">
+    <div class="col-12 text-center mb-5">
+      <h2 class="fw-bold">Frequently Asked Questions</h2>
+    </div>
+    <div class="col-lg-8 mx-auto">
+      <div class="accordion" id="pricingFAQ">
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq1"
+            >
+              Can I cancel my subscription anytime?
+            </button>
+          </h3>
+          <div
+            id="faq1"
+            class="accordion-collapse collapse show"
+            data-bs-parent="#pricingFAQ"
+          >
+            <div class="accordion-body">
+              Yes, you can cancel your subscription at any time. For monthly,
+              semi-annual, and annual plans, you'll continue to have access
+              until the end of your billing period.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq2"
+            >
+              What payment methods do you accept?
+            </button>
+          </h3>
+          <div
+            id="faq2"
+            class="accordion-collapse collapse"
+            data-bs-parent="#pricingFAQ"
+          >
+            <div class="accordion-body">
+              We accept all major credit cards, debit cards, UPI, Net Banking,
+              and PayPal. All payments are processed securely through encrypted
+              connections.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq3"
+            >
+              Can I switch between plans?
+            </button>
+          </h3>
+          <div
+            id="faq3"
+            class="accordion-collapse collapse"
+            data-bs-parent="#pricingFAQ"
+          >
+            <div class="accordion-body">
+              Yes, you can upgrade your plan at any time. When you upgrade,
+              you'll be charged the prorated difference for the remaining
+              period. Downgrades take effect at the end of your current billing
+              cycle.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq4"
+            >
+              Is the free trial really free?
+            </button>
+          </h3>
+          <div
+            id="faq4"
+            class="accordion-collapse collapse"
+            data-bs-parent="#pricingFAQ"
+          >
+            <div class="accordion-body">
+              Yes! The 1-day free trial gives you full access to all premium
+              features without requiring any payment information. No credit card
+              is needed to start your free trial.
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h3 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#faq5"
+            >
+              What happens when my subscription ends?
+            </button>
+          </h3>
+          <div
+            id="faq5"
+            class="accordion-collapse collapse"
+            data-bs-parent="#pricingFAQ"
+          >
+            <div class="accordion-body">
+              When your subscription ends, you'll revert to the Free plan. You
+              won't lose any of your resumes, but you won't be able to create
+              new ones using premium templates or access premium features until
+              you renew your subscription.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mock Payment Modal -->
+<div class="modal fade" id="mockPaymentModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Demo Payment</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <i class="fas fa-credit-card fa-3x text-mint mb-3"></i>
+          <h4>Mock Payment Processing</h4>
+          <p>This is a demonstration of the payment process.</p>
+          <div class="form-group mb-3">
+            <label class="form-label">Card Number</label>
+            <input
+              type="text"
+              class="form-control"
+              value="4242 4242 4242 4242"
+              readonly
+            />
+          </div>
+          <div class="row mb-3">
+            <div class="col-6">
+              <label class="form-label">Expiry</label>
+              <input type="text" class="form-control" value="12/25" readonly />
+            </div>
+            <div class="col-6">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" value="123" readonly />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-mint" id="confirm-mock-payment">
+          <i class="fas fa-check me-2"></i>Complete Demo Payment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Payment Successful</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+        <h4 id="successMessage">Welcome to Premium!</h4>
+        <p>Your account has been upgraded successfully.</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-mint"
+          data-bs-dismiss="modal"
+          onclick="window.location.reload()"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Currency Toggle
+    document.querySelectorAll(".currency-btn").forEach((button) => {
+      button.addEventListener("click", function () {
+        document
+          .querySelectorAll(".currency-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        this.classList.add("active");
+
+        const currency = this.dataset.currency;
+        document.querySelectorAll(".price-amount").forEach((element) => {
+          element.textContent = element.dataset[currency];
+        });
+      });
+    });
+
+    const upgradeButtons = document.querySelectorAll(".upgrade-btn");
+    const mockPaymentBtn = document.getElementById("mock-payment-btn");
+    const confirmMockPayment = document.getElementById("confirm-mock-payment");
+    const mockPaymentModal = new bootstrap.Modal(
+      document.getElementById("mockPaymentModal")
+    );
+    const successModal = new bootstrap.Modal(
+      document.getElementById("successModal")
+    );
+
+    // Handle upgrade buttons
+    upgradeButtons.forEach((button) => {
+      button.addEventListener("click", function () {
+        const planType = this.dataset.plan;
+        sessionStorage.setItem("selectedPlan", planType);
+        mockPaymentModal.show();
+      });
+    });
+
+    // Handle confirm payment
+    if (confirmMockPayment) {
+      confirmMockPayment.addEventListener("click", function () {
+        const planType = sessionStorage.getItem("selectedPlan") || "monthly";
+
+        // Show loading state
+        confirmMockPayment.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        confirmMockPayment.disabled = true;
+
+        // Get CSRF token
+        const csrfToken = document.querySelector(
+          'meta[name="csrf-token"]'
+        )?.content;
+
+        // Simulate payment processing
+        setTimeout(() => {
+          fetch(`/verify-mock-payment/${planType}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({
+              mock_payment: true,
+              plan: planType,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              mockPaymentModal.hide();
+              if (data.success) {
+                document.getElementById("successMessage").innerText =
+                  data.message;
+                successModal.show();
+              } else {
+                alert("Payment failed: " + data.error);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("An error occurred during payment processing.");
+            })
+            .finally(() => {
+              confirmMockPayment.innerHTML =
+                '<i class="fas fa-check me-2"></i>Complete Demo Payment';
+              confirmMockPayment.disabled = false;
+            });
+        }, 2000);
+      });
+    }
+  });
+</script>
+
+[file name]: pricing.html
+<style>
+  .pricing-card {
+    border: 2px solid #e9ecef;
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    background: white;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    border-color: #64ffda;
+  }
+
+  .pricing-card.premium {
+    border: 2px solid #64ffda;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 0 20px 50px rgba(100, 255, 218, 0.2);
+  }
+
+  .pricing-card.premium:hover {
+    box-shadow: 0 35px 70px rgba(100, 255, 218, 0.3);
+  }
+
+  .premium-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(145deg, #64ffda, #00bcd4);
+    color: #0a192f;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.4);
+    z-index: 1;
+  }
+
+  .premium-template {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .premium-template:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .premium-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      rgba(10, 25, 47, 0.9) 0%,
+      rgba(26, 43, 77, 0.9) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .premium-template:hover .premium-overlay {
+    opacity: 1;
+  }
+
+  .text-mint {
+    color: #64ffda !important;
+  }
+
+  .currency-switch {
+    display: inline-flex;
+    justify-content: center;
+    background: white;
+    border-radius: 50px;
+    padding: 6px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  }
+
+  .currency-btn {
+    padding: 10px 30px;
+    border: none;
+    background: transparent;
+    color: #0a192f;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+  }
+
+  .currency-btn.active {
+    background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+    color: #0a192f;
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+  }
+
+  .table th {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+    color: white;
+    border: none;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(26, 35, 126, 0.2);
+  }
+
+  .btn-mint {
+    background: linear-gradient(135deg, #64ffda 0%, #00bcd4 100%);
+    color: #0a192f;
+    border: none;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 20px rgba(100, 255, 218, 0.3);
+  }
+
+  .btn-mint:hover {
+    background: linear-gradient(135deg, #00bcd4 0%, #64ffda 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(100, 255, 218, 0.5);
+    color: #0a192f;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    border: none;
+  }
+
+  .trial-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(145deg, #ff6b6b, #ff8e8e);
+    color: white;
+    padding: 8px 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    z-index: 1;
+  }
+</style>
+{% endblock %}

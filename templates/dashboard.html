@@ -1,0 +1,400 @@
+{% extends "base.html" %} {% block title %}Dashboard - ProfileMint{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <!-- Welcome Header -->
+  <div class="row align-items-center mb-5">
+    <div class="col-md-8">
+      <div class="d-flex align-items-center">
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+          <i class="fas fa-user fa-xl text-primary"></i>
+        </div>
+        <div>
+          <h1 class="h2 fw-bold mb-1">
+            Welcome back, {{ session['user_name'] or session['user_email'] }}!
+          </h1>
+          <p class="text-muted mb-0">
+            Here's an overview of your resume activity.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 text-md-end">
+      <a href="{{ url_for('create_resume') }}" class="btn btn-mint btn-lg">
+        <i class="fas fa-plus me-2" aria-hidden="true"></i> Create New Resume
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="row mb-5">
+    <div class="col-md-4 mb-4 mb-md-0">
+      <div class="stats-card card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+              <i
+                class="fas fa-file-alt fa-2x text-primary"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ resume_count }}</h3>
+              <p class="text-muted mb-0">Total Resumes</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 pt-0">
+          <a
+            href="{{ url_for('my_resumes') }}"
+            class="btn btn-sm btn-outline-primary w-100"
+          >
+            View All <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4 mb-md-0">
+      <div class="stats-card card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center">
+            <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-eye fa-2x text-success" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ resume_count * 3 }}</h3>
+              <p class="text-muted mb-0">Total Views</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 pt-0">
+          <div class="d-flex align-items-center">
+            <i
+              class="fas fa-chart-line text-success me-1"
+              aria-hidden="true"
+            ></i>
+            <small class="text-muted">+12% from last month</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="stats-card card border-0 shadow-sm h-100">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center">
+            <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+              <i class="fas fa-download fa-2x text-info" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold mb-0">{{ resume_count * 2 }}</h3>
+              <p class="text-muted mb-0">Total Downloads</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 pt-0">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-chart-line text-info me-1" aria-hidden="true"></i>
+            <small class="text-muted">+8% from last month</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Recent Resumes -->
+    <div class="col-lg-8 mb-5">
+      <div class="card border-0 shadow-sm h-100">
+        <div
+          class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+        >
+          <h2 class="h5 fw-bold mb-0">Recent Resumes</h2>
+          <a
+            href="{{ url_for('my_resumes') }}"
+            class="btn btn-sm btn-outline-navy"
+          >
+            View All
+          </a>
+        </div>
+        <div class="card-body p-0">
+          {% if recent_resumes %}
+          <div class="list-group list-group-flush">
+            {% for resume in recent_resumes %}
+            <div class="list-group-item border-0 resume-item">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="flex-grow-1">
+                  <h3 class="h6 fw-bold mb-1">{{ resume.title }}</h3>
+                  <p class="text-muted small mb-2">
+                    Template: {{ resume.template }}
+                  </p>
+                  <div class="d-flex align-items-center">
+                    <span class="badge bg-light text-dark me-2">
+                      <i class="fas fa-clock me-1" aria-hidden="true"></i>
+                      {{ resume.updated_at.strftime('%b %d, %Y') }}
+                    </span>
+                    <span class="badge bg-light text-dark">
+                      <i class="fas fa-download me-1" aria-hidden="true"></i>
+                      {{ loop.index * 3 }} downloads
+                    </span>
+                  </div>
+                </div>
+                <div class="btn-group ms-3">
+                  <a
+                    href="{{ url_for('preview_resume', resume_id=resume.id) }}"
+                    class="btn btn-sm btn-outline-primary"
+                    title="Preview"
+                  >
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    href="{{ url_for('edit_resume', resume_id=resume.id) }}"
+                    class="btn btn-sm btn-outline-secondary"
+                    title="Edit"
+                  >
+                    <i class="fas fa-edit" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    href="{{ url_for('download_resume', resume_id=resume.id) }}"
+                    class="btn btn-sm btn-outline-success"
+                    title="Download"
+                  >
+                    <i class="fas fa-download" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="text-center py-5">
+            <div
+              class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style="width: 80px; height: 80px"
+            >
+              <i
+                class="fas fa-file-alt fa-2x text-muted"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <h3 class="h5 fw-bold">No resumes yet</h3>
+            <p class="text-muted mb-4">
+              Create your first resume to get started
+            </p>
+            <a href="{{ url_for('create_resume') }}" class="btn btn-mint">
+              <i class="fas fa-plus me-2" aria-hidden="true"></i> Create Resume
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions & Tips -->
+    <div class="col-lg-4">
+      <!-- Quick Actions -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0 py-3">
+          <h2 class="h5 fw-bold mb-0">Quick Actions</h2>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <a
+              href="{{ url_for('create_resume') }}"
+              class="btn btn-outline-navy text-start py-3 quick-action-btn"
+            >
+              <i class="fas fa-plus-circle me-2" aria-hidden="true"></i> Create
+              New Resume
+            </a>
+            <a
+              href="{{ url_for('my_resumes') }}"
+              class="btn btn-outline-secondary text-start py-3 quick-action-btn"
+            >
+              <i class="fas fa-file-alt me-2" aria-hidden="true"></i> Manage My
+              Resumes
+            </a>
+            <a
+              href="{{ url_for('account') }}"
+              class="btn btn-outline-secondary text-start py-3 quick-action-btn"
+            >
+              <i class="fas fa-user-circle me-2" aria-hidden="true"></i> View
+              Account Details
+            </a>
+            <a
+              href="{{ url_for('settings') }}"
+              class="btn btn-outline-secondary text-start py-3 quick-action-btn"
+            >
+              <i class="fas fa-cog me-2" aria-hidden="true"></i> Update Settings
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resume Tips -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+          <h2 class="h5 fw-bold mb-0">
+            <i class="fas fa-lightbulb me-2 text-warning"></i>Resume Tips
+          </h2>
+        </div>
+        <div class="card-body">
+          <div class="accordion" id="tipsAccordion">
+            <div class="accordion-item border-0">
+              <h3 class="accordion-header" id="tipOne">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne"
+                  aria-expanded="true"
+                  aria-controls="collapseOne"
+                >
+                  <i class="fas fa-pencil-alt me-2 text-primary"></i>Tailor Your
+                  Resume
+                </button>
+              </h3>
+              <div
+                id="collapseOne"
+                class="accordion-collapse collapse show"
+                aria-labelledby="tipOne"
+                data-bs-parent="#tipsAccordion"
+              >
+                <div class="accordion-body">
+                  Customize your resume for each job application. Highlight the
+                  skills and experiences most relevant to the position.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item border-0">
+              <h3 class="accordion-header" id="tipTwo">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo"
+                  aria-expanded="false"
+                  aria-controls="collapseTwo"
+                >
+                  <i class="fas fa-bolt me-2 text-warning"></i>Use Action Words
+                </button>
+              </h3>
+              <div
+                id="collapseTwo"
+                class="accordion-collapse collapse"
+                aria-labelledby="tipTwo"
+                data-bs-parent="#tipsAccordion"
+              >
+                <div class="accordion-body">
+                  Start bullet points with strong action verbs like "developed",
+                  "managed", "created", or "implemented" to make your experience
+                  stand out.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item border-0">
+              <h3 class="accordion-header" id="tipThree">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseThree"
+                  aria-expanded="false"
+                  aria-controls="collapseThree"
+                >
+                  <i class="fas fa-compress-alt me-2 text-info"></i>Keep It
+                  Concise
+                </button>
+              </h3>
+              <div
+                id="collapseThree"
+                class="accordion-collapse collapse"
+                aria-labelledby="tipThree"
+                data-bs-parent="#tipsAccordion"
+              >
+                <div class="accordion-body">
+                  Aim for a one-page resume if you have less than 10 years of
+                  experience. Be selective about what you include.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        .stats-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
+        .stats-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .stats-card .card-body {
+          padding: 2rem 1.5rem;
+        }
+
+        .stats-card .bg-opacity-10 {
+          background-color: rgba(var(--bs-primary-rgb), 0.12) !important;
+        }
+
+        .resume-item {
+          transition: all 0.3s ease;
+          border-radius: 8px;
+          margin-bottom: 0.5rem;
+        }
+
+        .resume-item:hover {
+          background-color: #f8f9fa !important;
+          transform: translateX(5px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .quick-action-btn {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border-radius: 10px;
+          text-align: left;
+          padding: 1rem 1.25rem;
+          border: 2px solid transparent;
+        }
+
+        .quick-action-btn:hover {
+          background-color: rgba(25, 135, 84, 0.08) !important;
+          transform: translateX(8px);
+          border-color: rgba(25, 135, 84, 0.2);
+        }
+
+        .accordion-button:not(.collapsed) {
+          background-color: rgba(13, 110, 253, 0.12);
+          color: #0d6efd;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(13, 110, 253, 0.15);
+        }
+
+        .accordion-button:focus {
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+          border-color: #86b7fe;
+        }
+
+        .btn-mint {
+          background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+          border: none;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+        }
+
+        .btn-mint:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(25, 135, 84, 0.4);
+          background: linear-gradient(135deg, #157347 0%, #19a27c 100%);
+        }
+      </style>
+      {% endblock %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,633 @@
+{% extends "base.html" %} {% block title %}Account - ProfileMint{% endblock %}
+{% block content %}
+
+<style>
+  .sidebar-sticky {
+    position: sticky;
+    top: 100px;
+    z-index: 1000;
+  }
+
+  .list-group-item {
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+
+  .list-group-item:hover {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    transform: translateX(5px);
+  }
+
+  .list-group-item.active {
+    background: linear-gradient(135deg, #1a237e, #283593);
+    border: none;
+    box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+  }
+
+  .avatar-initials {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #198754, #20c997);
+    box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+  }
+
+  .progress {
+    height: 10px;
+    border-radius: 10px;
+    background: #e9ecef;
+  }
+
+  .progress-bar {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #198754, #20c997);
+    box-shadow: 0 0 10px rgba(25, 135, 84, 0.4);
+  }
+
+  .account-card .card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .account-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .account-card .card-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: none;
+    padding: 1.2rem 1.5rem;
+    font-weight: 600;
+  }
+
+  .badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .bg-mint {
+    background: linear-gradient(135deg, #198754, #20c997);
+  }
+
+  .list-group-item {
+    border-radius: 12px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .list-group-item:hover {
+    background: #f8f9fa;
+    transform: translateX(5px);
+  }
+
+  .bg-light-mint {
+    background: rgba(25, 135, 84, 0.1);
+  }
+
+  .btn-outline-navy {
+    border: 2px solid #1a237e;
+    color: #1a237e;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-navy:hover {
+    background: #1a237e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+  }
+
+  .modal-content {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  @media (max-width: 992px) {
+    .sidebar-sticky {
+      position: relative;
+      top: 0;
+    }
+
+    .avatar-initials {
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="sidebar-sticky">
+        <div class="list-group">
+          <a
+            href="{{ url_for('dashboard') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-tachometer-alt me-3" aria-hidden="true"></i>
+            Dashboard
+          </a>
+          <a
+            href="{{ url_for('my_resumes') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-file-alt me-3" aria-hidden="true"></i> My Resumes
+          </a>
+          <a
+            href="{{ url_for('create_resume') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-plus-circle me-3" aria-hidden="true"></i> Create
+            Resume
+          </a>
+          <a
+            href="{{ url_for('account') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center active"
+          >
+            <i class="fas fa-user-circle me-3" aria-hidden="true"></i> Account
+          </a>
+          <a
+            href="{{ url_for('settings') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-cog me-3" aria-hidden="true"></i> Settings
+          </a>
+        </div>
+
+        <!-- Quick Stats Card -->
+        {% if user %}
+        <div class="card mt-4 d-none d-lg-block">
+          <div class="card-body text-center">
+            <div class="avatar mx-auto mb-3">
+              {% if user.profile_picture %}
+              <img
+                src="{{ url_for('uploaded_file', filename=user.profile_picture) }}"
+                alt="Profile picture of {{ user.name }}"
+                class="rounded-circle"
+                width="80"
+                height="80"
+                loading="lazy"
+              />
+              {% else %}
+              <div
+                class="avatar-initials bg-mint text-white rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                style="width: 80px; height: 80px; font-size: 2rem"
+              >
+                {{ user.name|first|upper }}{{ user.name.split('
+                ')[1]|first|upper if user.name.split(' ')|length > 1 else '' }}
+              </div>
+              {% endif %}
+            </div>
+            <h6 class="card-title mb-1">{{ user.name }}</h6>
+            <p class="text-muted small mb-2">{{ user.email }}</p>
+            <div class="d-flex justify-content-center">
+              <div class="text-center mx-2">
+                <div class="h5 mb-0 fw-bold">{{ user.resumes|length }}</div>
+                <small class="text-muted">Resumes</small>
+              </div>
+              <div class="text-center mx-2">
+                <div class="h5 mb-0 fw-bold">12</div>
+                <small class="text-muted">Downloads</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      {% if not user %}
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
+        User information not found. Please
+        <a href="{{ url_for('logout') }}">log out</a> and log in again.
+      </div>
+      {% else %}
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 fw-bold mb-0">Account Information</h1>
+        <a href="{{ url_for('settings') }}" class="btn btn-outline-navy">
+          <i class="fas fa-cog me-2" aria-hidden="true"></i> Settings
+        </a>
+      </div>
+
+      <!-- Profile Completion Progress -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="h6 card-title mb-0">Profile Completion</h2>
+            <span class="badge bg-mint">75%</span>
+          </div>
+          <div class="progress mb-3" style="height: 8px">
+            <div
+              class="progress-bar bg-mint"
+              role="progressbar"
+              style="width: 75%"
+              aria-valuenow="75"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="75% profile complete"
+            ></div>
+          </div>
+          <p class="small text-muted mb-0">
+            Complete your profile to unlock all features
+          </p>
+        </div>
+      </div>
+
+      <div class="account-card">
+        <div class="account-info text-center mb-4">
+          <div class="avatar mx-auto mb-3">
+            {% if user.profile_picture %}
+            <img
+              src="{{ url_for('uploaded_file', filename=user.profile_picture) }}"
+              alt="Profile picture of {{ user.name }}"
+              class="rounded-circle"
+              width="100"
+              height="100"
+              loading="lazy"
+            />
+            {% else %}
+            <div
+              class="avatar-initials bg-mint text-white rounded-circle d-flex align-items-center justify-content-center mx-auto"
+            >
+              {{ user.name|first|upper }}{{ user.name.split(' ')[1]|first|upper
+              if user.name.split(' ')|length > 1 else '' }}
+            </div>
+            {% endif %}
+          </div>
+          <h2 class="h4 fw-bold">{{ user.name }}</h2>
+          <p class="text-muted">{{ user.email }}</p>
+          <button
+            class="btn btn-outline-navy btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#uploadAvatarModal"
+          >
+            <i class="fas fa-camera me-2" aria-hidden="true"></i> Change Avatar
+          </button>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header bg-light">
+                <h3 class="h5 mb-0 fw-bold">Personal Information</h3>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label class="form-label small text-muted mb-1"
+                    >Full Name</label
+                  >
+                  <p class="mb-0">{{ user.name }}</p>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small text-muted mb-1"
+                    >Email Address</label
+                  >
+                  <p class="mb-0">{{ user.email }}</p>
+                </div>
+                <div class="mb-0">
+                  <label class="form-label small text-muted mb-1"
+                    >Member Since</label
+                  >
+                  <p class="mb-0">
+                    {{ user.created_at.strftime('%B %d, %Y') }}
+                  </p>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent">
+                <a
+                  href="{{ url_for('settings') }}#personal-info"
+                  class="btn btn-outline-navy btn-sm"
+                >
+                  <i class="fas fa-edit me-2" aria-hidden="true"></i> Edit
+                  Information
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header bg-light">
+                <h3 class="h5 mb-0 fw-bold">Subscription</h3>
+              </div>
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                  <div class="flex-grow-1">
+                    <h4 class="h6 mb-0">Free Plan</h4>
+                    <p class="small text-muted mb-0">
+                      Limited access to features
+                    </p>
+                  </div>
+                  <span class="badge bg-secondary">Current</span>
+                </div>
+                <ul class="list-unstyled small mb-0">
+                  <li class="mb-1">
+                    <i
+                      class="fas fa-check text-success me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Up to 3 resumes
+                  </li>
+                  <li class="mb-1">
+                    <i
+                      class="fas fa-check text-success me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Basic templates
+                  </li>
+                  <li class="mb-1">
+                    <i
+                      class="fas fa-times text-muted me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Premium templates
+                  </li>
+                  <li class="mb-1">
+                    <i
+                      class="fas fa-times text-muted me-2"
+                      aria-hidden="true"
+                    ></i>
+                    Unlimited downloads
+                  </li>
+                </ul>
+              </div>
+              <div class="card-footer bg-transparent">
+                <a href="{{ url_for('pricing') }}" class="btn btn-mint btn-sm">
+                  <i class="fas fa-crown me-2" aria-hidden="true"></i> Upgrade
+                  Plan
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscription Status -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Subscription Status</h5>
+          </div>
+          <div class="card-body">
+            {% if user.subscription_status == 'active' and user.is_premium %}
+            <div class="alert alert-success">
+              <h6><i class="fas fa-crown me-2"></i>Premium Member</h6>
+              <p class="mb-1">
+                Your subscription is active until {{
+                user.subscription_end.strftime('%B %d, %Y') }}
+              </p>
+              <a
+                href="{{ url_for('cancel_subscription') }}"
+                class="btn btn-sm btn-outline-danger mt-2"
+                >Cancel Subscription</a
+              >
+            </div>
+            {% elif user.subscription_status == 'canceled' %}
+            <div class="alert alert-info">
+              <h6>
+                <i class="fas fa-info-circle me-2"></i>Subscription Canceled
+              </h6>
+              <p class="mb-0">
+                Your subscription was canceled on {{
+                user.subscription_end.strftime('%B %d, %Y') if
+                user.subscription_end else 'recently' }}
+              </p>
+              <a
+                href="{{ url_for('pricing') }}"
+                class="btn btn-sm btn-mint mt-2"
+                >Renew Subscription</a
+              >
+            </div>
+            {% elif user.subscription_status == 'expired' %}
+            <div class="alert alert-warning">
+              <h6>
+                <i class="fas fa-exclamation-triangle me-2"></i>Subscription
+                Expired
+              </h6>
+              <p class="mb-0">
+                Your premium subscription expired on {{
+                user.subscription_end.strftime('%B %d, %Y') if
+                user.subscription_end else 'recently' }}
+              </p>
+              <a
+                href="{{ url_for('pricing') }}"
+                class="btn btn-sm btn-mint mt-2"
+                >Renew Subscription</a
+              >
+            </div>
+            {% else %}
+            <div class="alert alert-secondary">
+              <h6><i class="fas fa-user me-2"></i>Free Account</h6>
+              <p class="mb-1">
+                Upgrade to premium for access to all templates and features
+              </p>
+              <a
+                href="{{ url_for('pricing') }}"
+                class="btn btn-sm btn-mint mt-2"
+                >Upgrade Now</a
+              >
+            </div>
+            {% endif %}
+
+            <!-- Debug information (remove in production) -->
+            {% if config.DEBUG %}
+            <div class="mt-3 p-2 bg-light rounded">
+              <small class="text-muted">
+                Debug Info:<br />
+                is_premium: {{ user.is_premium }}<br />
+                subscription_status: {{ user.subscription_status }}<br />
+                subscription_end: {{ user.subscription_end }}<br />
+                now: {{ now() }}
+              </small>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if config.DEBUG %}
+        <div class="text-center mt-3">
+          <a
+            href="{{ url_for('sync_subscription_status') }}"
+            class="btn btn-sm btn-outline-secondary"
+          >
+            <i class="fas fa-sync me-1"></i> Sync Subscription Status
+          </a>
+        </div>
+        {% endif %}
+
+        <!-- Recent Activity -->
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h3 class="h5 mb-0 fw-bold">Recent Activity</h3>
+          </div>
+          <div class="card-body p-0">
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex align-items-center">
+                <div class="bg-light-mint rounded p-2 me-3">
+                  <i
+                    class="fas fa-file-download text-mint"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="mb-0">Downloaded Resume</h6>
+                    <small class="text-muted">2 hours ago</small>
+                  </div>
+                  <p class="mb-0 small text-muted">
+                    Software Engineer Template
+                  </p>
+                </div>
+              </div>
+              <div class="list-group-item d-flex align-items-center">
+                <div class="bg-light-mint rounded p-2 me-3">
+                  <i class="fas fa-edit text-mint" aria-hidden="true"></i>
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="mb-0">Updated Resume</h6>
+                    <small class="text-muted">1 day ago</small>
+                  </div>
+                  <p class="mb-0 small text-muted">Added new work experience</p>
+                </div>
+              </div>
+              <div class="list-group-item d-flex align-items-center">
+                <div class="bg-light-mint rounded p-2 me-3">
+                  <i
+                    class="fas fa-plus-circle text-mint"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+                <div class="flex-grow-1">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="mb-0">Created New Resume</h6>
+                    <small class="text-muted">3 days ago</small>
+                  </div>
+                  <p class="mb-0 small text-muted">
+                    Marketing Manager Template
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent text-center">
+            <a
+              href="{{ url_for('my_resumes') }}"
+              class="btn btn-outline-navy btn-sm"
+            >
+              View All Activity
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Upload Avatar Modal -->
+<div
+  class="modal fade"
+  id="uploadAvatarModal"
+  tabindex="-1"
+  aria-labelledby="uploadAvatarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadAvatarModalLabel">
+          Change Profile Picture
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="avatarForm"
+          action="{{ url_for('upload_avatar') }}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <div class="mb-3">
+            <label for="avatarUpload" class="form-label">Select an image</label>
+            <input
+              class="form-control"
+              type="file"
+              id="avatarUpload"
+              name="avatar"
+              accept="image/*"
+              required
+            />
+            <div class="form-text">
+              Maximum file size: 2MB. Supported formats: JPG, PNG, GIF.
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+        <button type="submit" form="avatarForm" class="btn btn-mint">
+          Upload
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Avatar upload preview
+  document
+    .getElementById("avatarUpload")
+    .addEventListener("change", function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          // Create a preview (could be enhanced to show preview in modal)
+          console.log("File selected:", file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,1495 @@
+{% extends "base.html" %} {% block title %}Settings - ProfileMint{% endblock %}
+{% block content %}
+
+<style>
+  /* settings.html */
+  .sidebar-sticky {
+    position: sticky;
+    top: 100px;
+  }
+
+  .list-group-item {
+    border: none;
+    border-radius: 12px !important;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+  }
+
+  .list-group-item:hover {
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border-left-color: #64ffda;
+    transform: translateX(4px);
+  }
+
+  .list-group-item.active {
+    background: linear-gradient(145deg, #0a192f, #1a2b47);
+    border-left-color: #64ffda;
+    color: white;
+  }
+
+  .nav-tabs .nav-link {
+    border: none;
+    border-radius: 0;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s ease;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: #0a192f;
+    border-bottom: 3px solid #64ffda;
+    background: transparent;
+  }
+
+  .tab-content {
+    border-radius: 0 0 16px 16px;
+  }
+
+  .card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+  }
+
+  .form-check-input:checked {
+    background-color: #64ffda;
+    border-color: #64ffda;
+  }
+</style>
+<div class="container py-4">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="sidebar-sticky">
+        <div class="list-group">
+          <a
+            href="{{ url_for('dashboard') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-tachometer-alt me-3" aria-hidden="true"></i>
+            Dashboard
+          </a>
+          <a
+            href="{{ url_for('my_resumes') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-file-alt me-3" aria-hidden="true"></i> My Resumes
+          </a>
+          <a
+            href="{{ url_for('create_resume') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-plus-circle me-3" aria-hidden="true"></i> Create
+            Resume
+          </a>
+          <a
+            href="{{ url_for('account') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center"
+          >
+            <i class="fas fa-user-circle me-3" aria-hidden="true"></i> Account
+          </a>
+          <a
+            href="{{ url_for('settings') }}"
+            class="list-group-item list-group-item-action d-flex align-items-center active"
+          >
+            <i class="fas fa-cog me-3" aria-hidden="true"></i> Settings
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 fw-bold">Settings</h1>
+        <!-- Theme Toggle -->
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="darkModeSwitch" />
+          <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+        </div>
+      </div>
+
+      <div class="card">
+        <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="profile-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#profile"
+              type="button"
+              role="tab"
+              aria-controls="profile"
+              aria-selected="true"
+            >
+              Profile
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="security-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#security"
+              type="button"
+              role="tab"
+              aria-controls="security"
+              aria-selected="false"
+            >
+              Security
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="preferences-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#preferences"
+              type="button"
+              role="tab"
+              aria-controls="preferences"
+              aria-selected="false"
+            >
+              Preferences
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="notifications-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#notifications"
+              type="button"
+              role="tab"
+              aria-controls="notifications"
+              aria-selected="false"
+            >
+              Notifications
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="privacy-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#privacy"
+              type="button"
+              role="tab"
+              aria-controls="privacy"
+              aria-selected="false"
+            >
+              Privacy
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="integrations-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#integrations"
+              type="button"
+              role="tab"
+              aria-controls="integrations"
+              aria-selected="false"
+            >
+              Integrations
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content p-4" id="settingsTabsContent">
+          <!-- Profile Tab -->
+          <div
+            class="tab-pane fade show active"
+            id="profile"
+            role="tabpanel"
+            aria-labelledby="profile-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Profile Settings</h2>
+            <form>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="settingsName" class="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="settingsName"
+                    value="{{ user.name }}"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="settingsEmail" class="form-label"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="settingsEmail"
+                    value="{{ user.email }}"
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="settingsPhone" class="form-label"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="settingsPhone"
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="settingsLocation" class="form-label"
+                    >Location</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="settingsLocation"
+                    placeholder="City, Country"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="settingsBio" class="form-label">Bio</label>
+                <textarea
+                  class="form-control"
+                  id="settingsBio"
+                  rows="3"
+                  placeholder="Tell us about yourself..."
+                ></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="profilePhoto" class="form-label"
+                  >Profile Photo</label
+                >
+                <input
+                  class="form-control"
+                  type="file"
+                  id="profilePhoto"
+                  accept="image/*"
+                />
+              </div>
+
+              <button type="submit" class="btn btn-mint">Update Profile</button>
+            </form>
+          </div>
+
+          <!-- Security Tab -->
+          <div
+            class="tab-pane fade"
+            id="security"
+            role="tabpanel"
+            aria-labelledby="security-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Security Settings</h2>
+            <form>
+              <div class="mb-3">
+                <label for="currentPassword" class="form-label"
+                  >Current Password</label
+                >
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="currentPassword"
+                    placeholder="Enter your current password"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="toggleCurrentPassword"
+                    aria-label="Toggle password visibility"
+                  >
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="newPassword"
+                    placeholder="Enter your new password"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="toggleNewPassword"
+                    aria-label="Toggle password visibility"
+                  >
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="form-text">
+                  Must be at least 8 characters with uppercase, lowercase, and
+                  number
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label for="confirmNewPassword" class="form-label"
+                  >Confirm New Password</label
+                >
+                <div class="input-group">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmNewPassword"
+                    placeholder="Confirm your new password"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    type="button"
+                    id="toggleConfirmNewPassword"
+                    aria-label="Toggle password visibility"
+                  >
+                    <i class="fas fa-eye" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-mint">
+                Change Password
+              </button>
+            </form>
+
+            <hr class="my-4" />
+
+            <h3 class="h6 fw-bold mb-3">Two-Factor Authentication</h3>
+            <div id="twoFactorSection">
+              {% if user.two_factor_enabled %}
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <div>
+                  <p class="mb-0">Two-factor authentication is enabled</p>
+                  <small class="text-muted"
+                    >Status: <span class="text-success">Enabled</span></small
+                  >
+                </div>
+                <button class="btn btn-outline-danger" id="disable2FABtn">
+                  Disable 2FA
+                </button>
+              </div>
+              {% else %}
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <div>
+                  <p class="mb-0">
+                    Add an extra layer of security to your account
+                  </p>
+                  <small class="text-muted"
+                    >Status: <span class="text-danger">Disabled</span></small
+                  >
+                </div>
+                <button class="btn btn-outline-mint" id="enable2FABtn">
+                  Enable 2FA
+                </button>
+              </div>
+              {% endif %}
+
+              <!-- 2FA Setup (hidden by default) -->
+              <div id="twoFactorSetup" class="d-none">
+                <div class="card mt-3">
+                  <div class="card-body">
+                    <h3 class="h6 card-title">
+                      Set Up Two-Factor Authentication
+                    </h3>
+                    <p class="card-text">
+                      Scan the QR code below with your authenticator app (like
+                      Google Authenticator or Authy)
+                    </p>
+
+                    <div class="text-center mb-3">
+                      <div
+                        id="qrcode"
+                        class="d-inline-block p-2 border rounded"
+                      ></div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="backupCodes" class="form-label"
+                        >Backup Codes</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="backupCodes"
+                        rows="3"
+                        readonly
+                      ></textarea>
+                      <div class="form-text">
+                        Save these codes in a secure place. Each code can be
+                        used once if you lose access to your authenticator app.
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="verificationCode" class="form-label"
+                        >Verification Code</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="verificationCode"
+                        placeholder="Enter code from authenticator app"
+                        maxlength="6"
+                        inputmode="numeric"
+                      />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                      <button
+                        type="button"
+                        class="btn btn-mint"
+                        id="verify2FABtn"
+                      >
+                        Verify & Enable
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary"
+                        id="cancel2FASetup"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <h3 class="h6 fw-bold mb-3">Active Sessions</h3>
+            <div class="session-list">
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded mb-2"
+              >
+                <div>
+                  <h4 class="h6 mb-0">Chrome on Windows</h4>
+                  <small class="text-muted"
+                    >New York, USA • Last active: 2 hours ago</small
+                  >
+                </div>
+                <span class="badge bg-success">Current</span>
+              </div>
+
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded mb-2"
+              >
+                <div>
+                  <h4 class="h6 mb-0">Safari on Mac</h4>
+                  <small class="text-muted"
+                    >California, USA • Last active: 3 days ago</small
+                  >
+                </div>
+                <button class="btn btn-sm btn-outline-danger">Revoke</button>
+              </div>
+
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded"
+              >
+                <div>
+                  <h4 class="h6 mb-0">Firefox on Linux</h4>
+                  <small class="text-muted"
+                    >London, UK • Last active: 2 weeks ago</small
+                  >
+                </div>
+                <button class="btn btn-sm btn-outline-danger">Revoke</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences Tab -->
+          <div
+            class="tab-pane fade"
+            id="preferences"
+            role="tabpanel"
+            aria-labelledby="preferences-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Preferences</h2>
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Language</label>
+                <select class="form-select">
+                  <option selected>English</option>
+                  <option>Spanish</option>
+                  <option>French</option>
+                  <option>German</option>
+                  <option>Chinese</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Date Format</label>
+                <select class="form-select">
+                  <option selected>MM/DD/YYYY</option>
+                  <option>DD/MM/YYYY</option>
+                  <option>YYYY-MM-DD</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Time Zone</label>
+                <select class="form-select">
+                  <option selected>(UTC-05:00) Eastern Time</option>
+                  <option>(UTC-06:00) Central Time</option>
+                  <option>(UTC-07:00) Mountain Time</option>
+                  <option>(UTC-08:00) Pacific Time</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="accessibilityMode"
+                    checked
+                  />
+                  <label class="form-check-label" for="accessibilityMode"
+                    >Accessibility Mode</label
+                  >
+                </div>
+                <small class="text-muted"
+                  >Increases font size and contrast for better
+                  readability</small
+                >
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="autoSave"
+                    checked
+                  />
+                  <label class="form-check-label" for="autoSave"
+                    >Auto-save Changes</label
+                  >
+                </div>
+                <small class="text-muted"
+                  >Automatically save changes to your resume as you work</small
+                >
+              </div>
+
+              <button type="submit" class="btn btn-mint">
+                Save Preferences
+              </button>
+            </form>
+          </div>
+
+          <!-- Notifications Tab -->
+          <div
+            class="tab-pane fade"
+            id="notifications"
+            role="tabpanel"
+            aria-labelledby="notifications-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Notification Preferences</h2>
+            <form>
+              <h3 class="h6 fw-bold mb-3">Email Notifications</h3>
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="emailResumeUpdates"
+                    checked
+                  />
+                  <label class="form-check-label" for="emailResumeUpdates"
+                    >Resume updates</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="emailProductNews"
+                    checked
+                  />
+                  <label class="form-check-label" for="emailProductNews"
+                    >Product news and updates</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="emailTips"
+                    checked
+                  />
+                  <label class="form-check-label" for="emailTips"
+                    >Tips and best practices</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="emailPromotional"
+                  />
+                  <label class="form-check-label" for="emailPromotional"
+                    >Promotional offers</label
+                  >
+                </div>
+              </div>
+
+              <h3 class="h6 fw-bold mb-3">In-App Notifications</h3>
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="inAppResumeUpdates"
+                    checked
+                  />
+                  <label class="form-check-label" for="inAppResumeUpdates"
+                    >Resume updates</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="inAppAchievements"
+                    checked
+                  />
+                  <label class="form-check-label" for="inAppAchievements"
+                    >Achievements</label
+                  >
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="inAppTips"
+                    checked
+                  />
+                  <label class="form-check-label" for="inAppTips"
+                    >Tips and suggestions</label
+                  >
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-mint">
+                Save Preferences
+              </button>
+            </form>
+          </div>
+
+          <!-- Privacy Tab -->
+          <div
+            class="tab-pane fade"
+            id="privacy"
+            role="tabpanel"
+            aria-labelledby="privacy-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Privacy Settings</h2>
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Profile Visibility</label>
+                <select class="form-select">
+                  <option selected>Public - Anyone can view my profile</option>
+                  <option>Private - Only I can view my profile</option>
+                  <option>Limited - Only people with the link can view</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Resume Visibility</label>
+                <select class="form-select">
+                  <option selected>Public - Anyone can view my resumes</option>
+                  <option>Private - Only I can view my resumes</option>
+                  <option>Limited - Only people with the link can view</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="dataCollection"
+                    checked
+                  />
+                  <label class="form-check-label" for="dataCollection"
+                    >Allow anonymous data collection</label
+                  >
+                </div>
+                <small class="text-muted"
+                  >Help us improve our services by sharing anonymous usage
+                  data</small
+                >
+              </div>
+
+              <div class="mb-4">
+                <div class="form-check form-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="personalizedAds"
+                    checked
+                  />
+                  <label class="form-check-label" for="personalizedAds"
+                    >Personalized advertising</label
+                  >
+                </div>
+                <small class="text-muted"
+                  >See ads that are more relevant to you based on your
+                  activity</small
+                >
+              </div>
+
+              <hr class="my-4" />
+
+              <h3 class="h6 fw-bold mb-3">Data Management</h3>
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <div>
+                  <p class="mb-0">Export your data</p>
+                  <small class="text-muted"
+                    >Download a copy of all your information</small
+                  >
+                </div>
+                <button class="btn btn-outline-mint">Export Data</button>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <p class="mb-0">Delete account data</p>
+                  <small class="text-muted"
+                    >Permanently remove your account and all data</small
+                  >
+                </div>
+                <button
+                  class="btn btn-outline-danger"
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteAccountModal"
+                >
+                  Delete Account
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Integrations Tab -->
+          <div
+            class="tab-pane fade"
+            id="integrations"
+            role="tabpanel"
+            aria-labelledby="integrations-tab"
+          >
+            <h2 class="h5 fw-bold mb-4">Connected Apps & Integrations</h2>
+            <div class="mb-4">
+              <!-- Google Integration -->
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded mb-2"
+              >
+                <div class="d-flex align-items-center">
+                  <div class="bg-light rounded p-2 me-3">
+                    <i
+                      class="fab fa-google text-danger fs-4"
+                      aria-hidden="true"
+                    ></i>
+                  </div>
+                  <div>
+                    <h4 class="h6 mb-0">Google</h4>
+                    <small class="text-muted">
+                      {% if user.google_id %} {% if user.google_connected %}
+                      Connected for authentication & calendar sync {% else %}
+                      Previously connected but currently disconnected {% endif
+                      %} {% else %} Connect for authentication & calendar sync
+                      {% endif %}
+                    </small>
+                  </div>
+                </div>
+
+                {% if user.google_id and user.google_connected %}
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  onclick="disconnectIntegration('google')"
+                >
+                  Disconnect
+                </button>
+                {% else %}
+                <button
+                  class="btn btn-sm btn-outline-mint"
+                  onclick="connectIntegration('google')"
+                >
+                  {% if user.google_id %}Reconnect{% else %}Connect{% endif %}
+                </button>
+                {% endif %}
+              </div>
+
+              <h3 class="h6 fw-bold mb-3">API Access</h3>
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded mb-4"
+              >
+                <div>
+                  <h4 class="h6 mb-0">API Key</h4>
+                  <small class="text-muted"
+                    >Use our API to integrate with your applications</small
+                  >
+                </div>
+                <button class="btn btn-outline-mint" onclick="generateApiKey()">
+                  Generate API Key
+                </button>
+              </div>
+
+              <h3 class="h6 fw-bold mb-3">Webhooks</h3>
+              <div
+                class="d-flex justify-content-between align-items-center p-3 border rounded"
+              >
+                <div>
+                  <h4 class="h6 mb-0">Webhook URL</h4>
+                  <small class="text-muted"
+                    >Receive real-time updates about your account</small
+                  >
+                </div>
+                <button
+                  class="btn btn-outline-mint"
+                  onclick="configureWebhooks()"
+                >
+                  Configure Webhooks
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Account Modal -->
+  <div
+    class="modal fade"
+    id="deleteAccountModal"
+    tabindex="-1"
+    aria-labelledby="deleteAccountModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="deleteAccountModalLabel">
+            Delete Account
+          </h2>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete your account? This action cannot be
+            undone.
+          </p>
+          <p>
+            All your data, including resumes and preferences, will be
+            permanently deleted.
+          </p>
+          <div class="form-check mb-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="confirmDelete"
+            />
+            <label class="form-check-label" for="confirmDelete">
+              I understand that this action is irreversible
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            disabled
+            id="deleteAccountBtn"
+          >
+            Delete Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Key Modal -->
+  <div
+    class="modal fade"
+    id="apiKeyModal"
+    tabindex="-1"
+    aria-labelledby="apiKeyModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="apiKeyModalLabel">Your New API Key</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Important:</strong> Copy this API key now and store it
+            securely. You won't be able to see it again!
+          </div>
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="apiKeyDisplay"
+              readonly
+            />
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              onclick="copyApiKey()"
+            >
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Enhanced CSRF token handling
+  function getCSRFToken() {
+    // Try meta tag first
+    const metaToken = document.querySelector('meta[name="csrf-token"]');
+    if (metaToken && metaToken.content) {
+      return metaToken.content;
+    }
+
+    // Try cookie as fallback
+    const cookieValue = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrf_token="))
+      ?.split("=")[1];
+
+    if (cookieValue) {
+      return decodeURIComponent(cookieValue);
+    }
+
+    console.error("CSRF token not found");
+    return "";
+  }
+
+  // Enhanced fetch with CSRF protection
+  async function csrfFetch(url, options = {}) {
+    const token = getCSRFToken();
+    const headers = {
+      "Content-Type": "application/json",
+      "X-CSRFToken": token,
+      "X-Requested-With": "XMLHttpRequest",
+      ...options.headers,
+    };
+
+    const config = {
+      ...options,
+      headers,
+      credentials: "same-origin",
+    };
+
+    try {
+      const response = await fetch(url, config);
+
+      // Handle CSRF errors
+      if (response.status === 400) {
+        const data = await response.json();
+        if (data.error && data.error.includes("CSRF")) {
+          // Refresh the page to get a new CSRF token
+          window.location.reload();
+          throw new Error("CSRF token expired, page refreshed");
+        }
+      }
+
+      return response;
+    } catch (error) {
+      console.error("Fetch error:", error);
+      throw error;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Toggle password visibility
+    function setupPasswordToggle(buttonId, inputId) {
+      const toggleButton = document.getElementById(buttonId);
+      const input = document.getElementById(inputId);
+
+      if (toggleButton && input) {
+        toggleButton.addEventListener("click", function () {
+          const type =
+            input.getAttribute("type") === "password" ? "text" : "password";
+          input.setAttribute("type", type);
+
+          const eyeIcon = this.querySelector("i");
+          if (type === "text") {
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash");
+            this.setAttribute("aria-label", "Hide password");
+          } else {
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye");
+            this.setAttribute("aria-label", "Show password");
+          }
+        });
+      }
+    }
+
+    setupPasswordToggle("toggleCurrentPassword", "currentPassword");
+    setupPasswordToggle("toggleNewPassword", "newPassword");
+    setupPasswordToggle("toggleConfirmNewPassword", "confirmNewPassword");
+
+    // Enable delete account button when checkbox is checked
+    const confirmDelete = document.getElementById("confirmDelete");
+    const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+
+    if (confirmDelete && deleteAccountBtn) {
+      confirmDelete.addEventListener("change", function () {
+        deleteAccountBtn.disabled = !this.checked;
+      });
+
+      // Add click event listener for account deletion
+      deleteAccountBtn.addEventListener("click", deleteAccount);
+    }
+
+    // Dark mode toggle
+    const darkModeSwitch = document.getElementById("darkModeSwitch");
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    // Check for saved theme preference or use OS preference
+    const currentTheme =
+      localStorage.getItem("theme") ||
+      (prefersDarkScheme.matches ? "dark" : "light");
+    if (currentTheme === "dark") {
+      document.body.classList.add("dark-mode");
+      if (darkModeSwitch) darkModeSwitch.checked = true;
+    }
+
+    if (darkModeSwitch) {
+      darkModeSwitch.addEventListener("change", function () {
+        if (this.checked) {
+          document.body.classList.add("dark-mode");
+          localStorage.setItem("theme", "dark");
+        } else {
+          document.body.classList.remove("dark-mode");
+          localStorage.setItem("theme", "light");
+        }
+      });
+    }
+
+    // 2FA setup
+    const enable2FABtn = document.getElementById("enable2FABtn");
+    const disable2FABtn = document.getElementById("disable2FABtn");
+    const verify2FABtn = document.getElementById("verify2FABtn");
+    const cancel2FASetup = document.getElementById("cancel2FASetup");
+
+    if (enable2FABtn) {
+      enable2FABtn.addEventListener("click", setupTwoFactorAuth);
+    }
+
+    if (disable2FABtn) {
+      disable2FABtn.addEventListener("click", disableTwoFactorAuth);
+    }
+
+    if (verify2FABtn) {
+      verify2FABtn.addEventListener("click", verifyTwoFactorAuth);
+    }
+
+    if (cancel2FASetup) {
+      cancel2FASetup.addEventListener("click", function () {
+        document.getElementById("twoFactorSetup").classList.add("d-none");
+        if (enable2FABtn) {
+          enable2FABtn.style.display = "block";
+          enable2FABtn.disabled = false;
+          enable2FABtn.innerHTML = "Enable 2FA";
+        }
+      });
+    }
+  });
+
+  async function connectIntegration(service) {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML =
+      '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connecting...';
+    btn.disabled = true;
+
+    try {
+      // Redirect to the correct OAuth endpoint for integration
+      if (service === "google") {
+        window.location.href = "/connect-google";
+      } else {
+        throw new Error("Unknown service");
+      }
+    } catch (error) {
+      console.error("Error connecting integration:", error);
+      alert("Error connecting integration. Please try again.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  }
+
+  async function disconnectIntegration(service) {
+    if (confirm(`Are you sure you want to disconnect ${service}?`)) {
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Disconnecting...';
+      btn.disabled = true;
+
+      try {
+        const response = await csrfFetch(`/disconnect-integration/${service}`, {
+          method: "POST",
+        });
+
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          throw new Error("Failed to disconnect");
+        }
+      } catch (error) {
+        console.error("Error disconnecting integration:", error);
+        alert("Error disconnecting integration. Please try again.");
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  }
+
+  async function generateApiKey() {
+    try {
+      const btn = event.target;
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+      btn.disabled = true;
+
+      const response = await csrfFetch("/generate-api-key", {
+        method: "POST",
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Non-JSON response received:", errorText);
+        throw new Error("Server returned an unexpected response");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Show the API key in a modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("apiKeyModal")
+        );
+        document.getElementById("apiKeyDisplay").value = data.api_key;
+        modal.show();
+      } else {
+        alert("Error generating API key: " + (data.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Error generating API key:", error);
+      alert("Error generating API key. Please try again.");
+    } finally {
+      const btn = event.target;
+      btn.innerHTML = "Generate API Key";
+      btn.disabled = false;
+    }
+  }
+
+  async function setupTwoFactorAuth() {
+    try {
+      const btn = document.getElementById("enable2FABtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Setting up...';
+      btn.disabled = true;
+
+      const response = await csrfFetch("/enable-2fa", {
+        method: "POST",
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Non-JSON response received:", errorText);
+        throw new Error("Server returned an unexpected response");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Generate and display QR code
+        const qrResponse = await csrfFetch("/generate-2fa-qr");
+
+        // Check if QR response is JSON
+        const qrContentType = qrResponse.headers.get("content-type");
+        if (!qrContentType || !qrContentType.includes("application/json")) {
+          const errorText = await qrResponse.text();
+          console.error("Non-JSON response received for QR:", errorText);
+          throw new Error("Server returned an unexpected response for QR code");
+        }
+
+        const qrData = await qrResponse.json();
+
+        if (qrData.success) {
+          // Display QR code
+          const qrCodeContainer = document.getElementById("qrcode");
+          qrCodeContainer.innerHTML = "";
+
+          const img = document.createElement("img");
+          img.src = qrData.qr_code;
+          img.alt = "2FA QR Code";
+          img.style.width = "180px";
+          img.style.height = "180px";
+          qrCodeContainer.appendChild(img);
+
+          // Display backup codes
+          document.getElementById("backupCodes").value =
+            data.backup_codes.join("\n");
+
+          // Show the setup section
+          document.getElementById("twoFactorSetup").classList.remove("d-none");
+
+          // Hide the enable button
+          btn.style.display = "none";
+        } else {
+          throw new Error(qrData.error || "Failed to generate QR code");
+        }
+      } else {
+        throw new Error(data.error || "Failed to enable 2FA");
+      }
+    } catch (error) {
+      console.error("Error setting up 2FA:", error);
+      alert("Error setting up 2FA: " + error.message);
+
+      // Reset button
+      const btn = document.getElementById("enable2FABtn");
+      btn.innerHTML = "Enable 2FA";
+      btn.disabled = false;
+      btn.style.display = "block";
+    }
+  }
+
+  async function verifyTwoFactorAuth() {
+    const code = document.getElementById("verificationCode").value.trim();
+
+    if (!code || code.length !== 6) {
+      alert("Please enter a valid 6-digit code");
+      return;
+    }
+
+    try {
+      const btn = document.getElementById("verify2FABtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying...';
+      btn.disabled = true;
+
+      const response = await csrfFetch("/verify-2fa", {
+        method: "POST",
+        body: JSON.stringify({ code: code }),
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Non-JSON response received:", errorText);
+        throw new Error("Server returned an unexpected response");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("2FA has been enabled successfully!");
+        window.location.reload();
+      } else {
+        alert("Error: " + (data.error || "Invalid verification code"));
+      }
+    } catch (error) {
+      console.error("Error verifying 2FA:", error);
+      alert("Error verifying 2FA code. Please try again.");
+    } finally {
+      const btn = document.getElementById("verify2FABtn");
+      btn.innerHTML = "Verify & Enable";
+      btn.disabled = false;
+    }
+  }
+
+  async function disableTwoFactorAuth() {
+    if (
+      !confirm(
+        "Are you sure you want to disable two-factor authentication? This will make your account less secure."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const btn = document.getElementById("disable2FABtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Disabling...';
+      btn.disabled = true;
+
+      const response = await csrfFetch("/disable-2fa", {
+        method: "POST",
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Non-JSON response received:", errorText);
+        throw new Error("Server returned an unexpected response");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("2FA has been disabled successfully!");
+        window.location.reload();
+      } else {
+        alert("Error disabling 2FA: " + (data.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error("Error disabling 2FA:", error);
+      alert("Error disabling 2FA. Please try again.");
+    } finally {
+      const btn = document.getElementById("disable2FABtn");
+      btn.innerHTML = "Disable 2FA";
+      btn.disabled = false;
+    }
+  }
+
+  // NEW FUNCTION: Account deletion
+  async function deleteAccount() {
+    if (
+      !confirm(
+        "Are you absolutely sure? This action cannot be undone. All your data will be permanently deleted."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const btn = document.getElementById("deleteAccountBtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...';
+      btn.disabled = true;
+
+      const response = await csrfFetch("/delete-account", {
+        method: "POST",
+      });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Non-JSON response received:", errorText);
+        throw new Error("Server returned an unexpected response");
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("deleteAccountModal")
+        );
+        if (modal) {
+          modal.hide();
+        }
+
+        // Show success message and redirect to home page
+        alert(data.message);
+        window.location.href = "{{ url_for('index') }}";
+      } else {
+        throw new Error(data.error || "Failed to delete account");
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Error deleting account: " + error.message);
+
+      // Reset button
+      const btn = document.getElementById("deleteAccountBtn");
+      btn.innerHTML = "Delete Account";
+      btn.disabled = false;
+    }
+  }
+
+  function copyApiKey() {
+    const apiKey = document.getElementById("apiKeyDisplay");
+    apiKey.select();
+    document.execCommand("copy");
+    alert("API key copied to clipboard!");
+  }
+
+  function configureWebhooks() {
+    alert("Webhook configuration will be available soon!");
+  }
+</script>
+{% endblock %}

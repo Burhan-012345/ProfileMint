@@ -1,0 +1,786 @@
+{% extends "base.html" %} {% block title %}Home - ProfileMint{% endblock %} {%
+block content %}
+
+<style>
+  .hero-section {
+    background: linear-gradient(
+        135deg,
+        rgba(26, 35, 126, 0.9),
+        rgba(40, 53, 147, 0.85)
+      ),
+      url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80");
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 60px;
+  }
+
+  .hero-title {
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-weight: 400;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-mint {
+    background: linear-gradient(135deg, #198754, #20c997);
+    border: none;
+    padding: 15px 35px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+  }
+
+  .btn-mint:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(25, 135, 84, 0.4);
+    background: linear-gradient(135deg, #157347, #19a97d);
+  }
+
+  .btn-outline-light {
+    border: 2px solid white;
+    padding: 13px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-light:hover {
+    background: white;
+    color: #1a237e;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+  }
+
+  .feature-card {
+    transition: all 0.3s ease;
+    padding: 30px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    height: 100%;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(25, 135, 84, 0.2);
+  }
+
+  .feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  }
+
+  .feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(135deg, #198754, #20c997);
+    color: white;
+  }
+
+  .counter-item {
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    transition: all 0.3s ease;
+  }
+
+  .counter-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+  }
+
+  .counter {
+    font-weight: 800;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #1a237e, #283593);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .counter-item:hover .counter {
+    transform: scale(1.1);
+  }
+
+  .testimonial-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background: #fff;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  }
+
+  .testimonial-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .testimonial-card:hover .testimonial-img {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .pricing-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    background: #fff;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  }
+
+  .pricing-card.featured {
+    border: 3px solid #198754;
+    transform: scale(1.03);
+  }
+
+  .pricing-card.featured:hover {
+    transform: scale(1.03) translateY(-8px);
+  }
+
+  .pricing-header {
+    padding: 30px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .pricing-features li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .pricing-features li:hover {
+    background: rgba(25, 135, 84, 0.05);
+    padding-left: 10px;
+  }
+
+  .pricing-features li:last-child {
+    border-bottom: none;
+  }
+
+  .cta-section {
+    background: linear-gradient(
+        135deg,
+        rgba(26, 35, 126, 0.95),
+        rgba(40, 53, 147, 0.9)
+      ),
+      url("https://images.unsplash.com/photo-1579389083078-4e7018379f7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80");
+    background-size: cover;
+    background-position: center;
+    padding: 80px 0;
+    border-radius: 30px;
+    margin-top: 60px;
+  }
+
+  .faq-item {
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  .accordion-button:not(.collapsed) {
+    background: linear-gradient(
+      135deg,
+      rgba(25, 135, 84, 0.1),
+      rgba(25, 135, 84, 0.05)
+    );
+    color: #198754;
+    font-weight: 600;
+  }
+
+  .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(25, 135, 84, 0.25);
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 60px 0;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .feature-card {
+      padding: 20px 15px;
+    }
+
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    .counter {
+      font-size: 2.5rem;
+    }
+
+    .pricing-card.featured {
+      transform: scale(1);
+    }
+
+    .pricing-card.featured:hover {
+      transform: translateY(-8px);
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="hero-section bg-navy text-white py-5">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="display-4 fw-bold mb-4">
+          Create Professional Resumes in Minutes
+        </h1>
+        <p class="lead mb-4">
+          ProfileMint helps you create stunning resumes with our easy-to-use
+          templates. Stand out from the crowd and land your dream job.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          {% if 'user_id' not in session %}
+          <a href="{{ url_for('register') }}" class="btn btn-mint btn-lg">
+            Get Started
+          </a>
+          <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg">
+            Login
+          </a>
+          {% else %}
+          <a href="{{ url_for('create_resume') }}" class="btn btn-mint btn-lg">
+            Create Resume
+          </a>
+          <a
+            href="{{ url_for('my_resumes') }}"
+            class="btn btn-outline-light btn-lg"
+          >
+            My Resumes
+          </a>
+          {% endif %}
+        </div>
+        <div class="mt-4">
+          <small class="text-light-opacity">
+            <i class="fas fa-shield-alt me-1" aria-hidden="true"></i>
+            Trusted by thousands of job seekers worldwide
+          </small>
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <div class="hero-image-container">
+          <img
+            src="{{ url_for('static', filename='img/mint.png') }}"
+            alt="Professional resume example"
+            class="img-fluid hero-image"
+            loading="eager"
+          />
+          <div class="floating-badge">
+            <i class="fas fa-check-circle me-1"></i>10+ Templates
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-4 bg-light">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-item">
+          <h3 class="fw-bold text-primary mb-1">10,000+</h3>
+          <p class="text-muted mb-0">Resumes Created</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-item">
+          <h3 class="fw-bold text-success mb-1">95%</h3>
+          <p class="text-muted mb-0">Success Rate</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-item">
+          <h3 class="fw-bold text-info mb-1">24/7</h3>
+          <p class="text-muted mb-0">Support</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-4">
+        <div class="stat-item">
+          <h3 class="fw-bold text-warning mb-1">10+</h3>
+          <p class="text-muted mb-0">Templates</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="display-5 fw-bold mb-3">Why Choose ProfileMint?</h2>
+      <p class="lead text-muted">
+        We provide everything you need to create a professional resume
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-primary bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i
+                class="fas fa-palette fa-2x text-primary"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">Beautiful Templates</h3>
+            <p class="text-muted">
+              Choose from multiple professionally designed templates to showcase
+              your skills.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-success bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i
+                class="fas fa-file-pdf fa-2x text-success"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">PDF Download</h3>
+            <p class="text-muted">
+              Download your resume as a PDF file that's ready to send to
+              employers.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-info bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i class="fas fa-edit fa-2x text-info" aria-hidden="true"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">Easy Editing</h3>
+            <p class="text-muted">
+              Easily update and customize your resume whenever you need to.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-warning bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i class="fas fa-cloud fa-2x text-warning" aria-hidden="true"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">Cloud Storage</h3>
+            <p class="text-muted">
+              Your resumes are safely stored in the cloud and accessible from
+              anywhere.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-danger bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i
+                class="fas fa-mobile-alt fa-2x text-danger"
+                aria-hidden="true"
+              ></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">Mobile Friendly</h3>
+            <p class="text-muted">
+              Create and edit your resumes on any device, anywhere.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card card border-0 h-100">
+          <div class="card-body text-center p-4">
+            <div
+              class="feature-icon bg-dark bg-opacity-10 rounded-circle mx-auto mb-4"
+            >
+              <i class="fas fa-lock fa-2x text-dark" aria-hidden="true"></i>
+            </div>
+            <h3 class="h4 fw-bold mb-3">Secure</h3>
+            <p class="text-muted">
+              Your data is protected with industry-standard security measures.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="display-5 fw-bold mb-3">What Our Users Say</h2>
+      <p class="lead text-muted">
+        Join thousands of satisfied users who landed their dream jobs
+      </p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                <i
+                  class="fas fa-user fa-2x text-primary"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-0">Sarah Johnson</h3>
+                <small class="text-muted">Software Engineer</small>
+              </div>
+            </div>
+            <div class="rating mb-3">
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+            </div>
+            <p class="mb-0">
+              "ProfileMint helped me create a stunning resume that got me
+              interviews at top tech companies. The templates are professional
+              and the editing process is so easy!"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                <i
+                  class="fas fa-user fa-2x text-success"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-0">Michael Chen</h3>
+                <small class="text-muted">Marketing Manager</small>
+              </div>
+            </div>
+            <div class="rating mb-3">
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+            </div>
+            <p class="mb-0">
+              "I was able to customize my resume for different job applications
+              in minutes. The PDF export feature is perfect for sending to
+              recruiters."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3">
+                <i class="fas fa-user fa-2x text-info" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h3 class="h6 fw-bold mb-0">Emily Rodriguez</h3>
+                <small class="text-muted">Recent Graduate</small>
+              </div>
+            </div>
+            <div class="rating mb-3">
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+              <i class="fas fa-star text-warning"></i>
+            </div>
+            <p class="mb-0">
+              "As a recent graduate, I was struggling to create a professional
+              resume. ProfileMint made it so easy and I got my first job offer
+              within two weeks!"
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-mint text-white">
+  <div class="container py-5 text-center">
+    <h2 class="display-5 fw-bold mb-3">Ready to Create Your Resume?</h2>
+    <p class="lead mb-4">
+      Join thousands of users who have landed their dream jobs with ProfileMint
+    </p>
+    {% if 'user_id' not in session %}
+    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg mx-2">
+      Get Started Free
+    </a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg mx-2">
+      Login
+    </a>
+    {% else %}
+    <a href="{{ url_for('create_resume') }}" class="btn btn-light btn-lg mx-2">
+      Create New Resume
+    </a>
+    <a
+      href="{{ url_for('my_resumes') }}"
+      class="btn btn-outline-light btn-lg mx-2"
+    >
+      View My Resumes
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5 bg-light">
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+      <p class="lead text-muted">
+        Find answers to common questions about ProfileMint
+      </p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="accordion" id="faqAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq1"
+              >
+                Is ProfileMint free to use?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse show">
+              <div class="accordion-body">
+                Yes, ProfileMint offers a free plan with access to basic
+                templates and features. We also offer premium plans with
+                additional templates and advanced features.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq2"
+              >
+                Can I download my resume as a PDF?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Yes, you can download your resume as a PDF, Word document, or
+                plain text. The PDF format is perfect for printing and sending
+                to employers.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#faq3"
+              >
+                Is my data secure?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse">
+              <div class="accordion-body">
+                Absolutely. We take data security seriously. Your information is
+                encrypted and we never share your personal data with third
+                parties.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a
+            href="{{ url_for('contact_support') }}"
+            class="btn btn-outline-navy"
+          >
+            More Questions? Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-image-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero-image {
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: perspective(1000px) rotateY(-5deg);
+    transition: all 0.3s ease;
+  }
+
+  .hero-image:hover {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+
+  .floating-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: linear-gradient(145deg, #198754, #20c997);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .stat-item {
+    padding: 20px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .template-card {
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .template-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .template-preview {
+    overflow: hidden;
+    height: 250px;
+  }
+
+  .template-preview img {
+    transition: transform 0.3s ease;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .template-card:hover .template-preview img {
+    transform: scale(1.05);
+  }
+
+  .testimonial-card {
+    transition: transform 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .rating {
+    font-size: 0.9rem;
+  }
+</style>
+{% endblock %}
