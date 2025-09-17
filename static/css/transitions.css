@@ -1,0 +1,439 @@
+/* transitions.css - Smooth transition effects for ProfileMint */
+
+/* Global transition settings */
+* {
+  transition-property: color, background-color, border-color, transform, opacity,
+    box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}
+
+/* Focus on content elements for better performance */
+body,
+.container,
+.card,
+.btn,
+.form-control,
+.navbar,
+.footer,
+.list-group-item,
+.dropdown-menu,
+.modal-content,
+.alert {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Button hover effects */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+.btn-mint:hover {
+  background-color: #45e6be;
+  border-color: #45e6be;
+  box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+}
+
+.btn-outline-navy:hover {
+  background-color: #0a192f;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Card hover effects */
+.card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card.border-dashed:hover {
+  border-color: #64ffda !important;
+  transform: translateY(-3px);
+}
+
+/* Form control transitions */
+.form-control {
+  transition: all 0.3s ease;
+  border: 2px solid #dee2e6;
+}
+
+.form-control:focus {
+  border-color: #64ffda;
+  box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+  transform: translateY(-1px);
+}
+
+.form-select:focus {
+  border-color: #64ffda;
+  box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+}
+
+/* Navigation transitions */
+.navbar-brand,
+.nav-link,
+.dropdown-item {
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #64ffda !important;
+  transform: translateY(-1px);
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  padding-left: 1.5rem;
+}
+
+/* List group transitions */
+.list-group-item {
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.list-group-item-action:hover {
+  background-color: rgba(100, 255, 218, 0.1);
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Modal transitions */
+.modal.fade .modal-dialog {
+  transform: translate(0, -50px);
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: translate(0, 0);
+}
+
+.modal-content {
+  transition: all 0.3s ease;
+}
+
+/* Alert transitions */
+.alert {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.alert.fade {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+/* Avatar and image transitions */
+.avatar-initials,
+.avatar img {
+  transition: all 0.3s ease;
+}
+
+.avatar-initials:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+}
+
+/* Template selection animations */
+.resume-template {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.resume-template:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.resume-template.selected {
+  animation: pulse 0.6s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Step progress animations */
+.step {
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+/* Experience/education item animations */
+.experience-item,
+.education-item {
+  transition: all 0.3s ease;
+}
+
+.experience-item:hover,
+.education-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Social media icon transitions */
+.social-links a {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.social-links a:hover {
+  transform: translateY(-3px);
+  color: #64ffda !important;
+}
+
+/* Tab content transitions */
+.tab-content > .tab-pane {
+  transition: opacity 0.3s ease;
+}
+
+.tab-content > .tab-pane.fade {
+  opacity: 0;
+}
+
+.tab-content > .tab-pane.fade.show {
+  opacity: 1;
+}
+
+/* Loading animations */
+.spinner-border {
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fade-in animations for page elements */
+.fade-in {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide animations */
+.slide-in-left {
+  animation: slideInLeft 0.5s ease;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale animations */
+.scale-in {
+  animation: scaleIn 0.4s ease;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Bounce animations */
+.bounce-in {
+  animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse animation for notifications */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Hover effects for dashboard stats */
+.bg-primary.bg-opacity-10,
+.bg-success.bg-opacity-10,
+.bg-info.bg-opacity-10 {
+  transition: all 0.3s ease;
+}
+
+.bg-primary.bg-opacity-10:hover,
+.bg-success.bg-opacity-10:hover,
+.bg-info.bg-opacity-10:hover {
+  transform: scale(1.05);
+  background-color: rgba(13, 110, 253, 0.2) !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Dark mode transitions */
+body.dark-mode {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Responsive transitions */
+@media (max-width: 768px) {
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Custom transition utilities */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+.transition-colors {
+  transition: color 0.3s ease, background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.transition-transform {
+  transition: transform 0.3s ease;
+}
+
+.transition-opacity {
+  transition: opacity 0.3s ease;
+}
+
+.transition-slow {
+  transition-duration: 0.5s;
+}
+
+.transition-fast {
+  transition-duration: 0.15s;
+}
