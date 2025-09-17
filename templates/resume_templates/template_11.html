@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ resume.title }} - Premium Resume</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+          --primary: #2563eb;
+          --secondary: #f97316;
+          --accent: #8b5cf6;
+          --light: #f1f5f9;
+          --dark: #1e293b;
+          --gray: #64748b;
+      }
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.6;
+          color: var(--dark);
+          max-width: 210mm;
+          margin: 0 auto;
+          padding: 0;
+          background-color: #fff;
+      }
+
+      .resume-container {
+          background: white;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar {
+          background: linear-gradient(to bottom, var(--primary), #1e40af);
+          color: white;
+          width: 280px;
+          padding: 40px 30px;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+      }
+
+      .main-content {
+          margin-left: 280px;
+          padding: 40px 50px;
+      }
+
+      .photo-container {
+          text-align: center;
+          margin-bottom: 30px;
+      }
+
+      .photo {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 4px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .name {
+          font-family: 'Merriweather', serif;
+          font-size: 28px;
+          font-weight: 700;
+          margin: 0 0 10px 0;
+          text-align: center;
+      }
+
+      .title {
+          font-size: 16px;
+          margin: 0 0 30px 0;
+          text-align: center;
+          opacity: 0.9;
+      }
+
+      .contact-info {
+          margin-bottom: 40px;
+      }
+
+      .contact-item {
+          display: flex;
+          align-items: center;
+          margin-bottom: 15px;
+          font-size: 14px;
+      }
+
+      .contact-item i {
+          margin-right: 15px;
+          font-size: 18px;
+          width: 20px;
+          text-align: center;
+          color: var(--secondary);
+      }
+
+      .sidebar-section {
+          margin-bottom: 40px;
+      }
+
+      .sidebar-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 20px;
+          padding-bottom: 10px;
+          border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          position: relative;
+      }
+
+      .sidebar-title::after {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 40px;
+          height: 2px;
+          background: var(--secondary);
+      }
+
+      .skills {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+      }
+
+      .skill {
+          margin-bottom: 10px;
+      }
+
+      .skill-name {
+          font-size: 14px;
+          margin-bottom: 5px;
+      }
+
+      .skill-bar {
+          height: 6px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 3px;
+          overflow: hidden;
+      }
+
+      .skill-level {
+          height: 100%;
+          background: var(--secondary);
+          border-radius: 3px;
+      }
+
+      .language {
+          margin-bottom: 15px;
+      }
+
+      .language-name {
+          font-size: 14px;
+          margin-bottom: 5px;
+      }
+
+      .language-proficiency {
+          display: flex;
+          gap: 5px;
+      }
+
+      .dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2);
+      }
+
+      .dot.filled {
+          background: var(--secondary);
+      }
+
+      .main-section {
+          margin-bottom: 40px;
+      }
+
+      .main-title {
+          font-family: 'Merriweather', serif;
+          font-size: 24px;
+          font-weight: 700;
+          color: var(--primary);
+          margin-bottom: 25px;
+          padding-bottom: 10px;
+          border-bottom: 2px solid var(--light);
+          position: relative;
+      }
+
+      .main-title::after {
+          content: "";
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 60px;
+          height: 2px;
+          background: var(--secondary);
+      }
+
+      .experience-item,
+      .education-item {
+          margin-bottom: 30px;
+          position: relative;
+          padding-left: 30px;
+      }
+
+      .experience-item::before,
+      .education-item::before {
+          content: "•";
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: var(--secondary);
+          font-size: 28px;
+      }
+
+      .item-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          align-items: flex-start;
+      }
+
+      .item-title {
+          font-weight: 600;
+          color: var(--dark);
+          font-size: 18px;
+      }
+
+      .item-date {
+          color: var(--primary);
+          font-weight: 500;
+          background: var(--light);
+          padding: 5px 12px;
+          border-radius: 20px;
+          font-size: 14px;
+      }
+
+      .item-subtitle {
+          font-style: italic;
+          margin-bottom: 12px;
+          color: var(--gray);
+          font-size: 16px;
+      }
+
+      .summary {
+          background: var(--light);
+          padding: 30px;
+          border-radius: 10px;
+          margin-bottom: 40px;
+          position: relative;
+      }
+
+      .summary::before {
+          content: """;
+          position: absolute;
+          top: 10px;
+          left: 15px;
+          font-family: 'Merriweather', serif;
+          font-size: 60px;
+          color: var(--primary);
+          opacity: 0.2;
+          line-height: 1;
+      }
+
+      .summary p {
+          margin: 0;
+          font-size: 16px;
+          line-height: 1.7;
+          color: var(--dark);
+          position: relative;
+          z-index: 1;
+      }
+
+      .decoration {
+          position: absolute;
+          z-index: 0;
+          opacity: 0.03;
+          color: var(--primary);
+          font-size: 200px;
+      }
+
+      .decoration-1 {
+          top: 20%;
+          right: 5%;
+      }
+
+      .decoration-2 {
+          bottom: 10%;
+          left: 45%;
+      }
+
+      @media print {
+          body {
+              padding: 0;
+              background: none;
+          }
+
+          .sidebar {
+              width: 250px;
+              padding: 20px;
+          }
+
+          .main-content {
+              margin-left: 250px;
+              padding: 20px;
+          }
+
+          .decoration {
+              display: none;
+          }
+      }
+    </style>
+  </head>
+  <body>
+    {% if is_public_view %}
+    <div class="alert alert-info mb-4">
+      <i class="fas fa-globe me-2"></i> This is a public view of a resume
+      created with ProfileMint.
+      <a href="{{ url_for('index') }}" class="alert-link"
+        >Create your own resume</a
+      >.
+    </div>
+    {% endif %}
+
+    <div class="resume-container">
+      <div class="decoration decoration-1"><i class="fas fa-circle"></i></div>
+      <div class="decoration decoration-2"><i class="fas fa-square"></i></div>
+
+      <div class="sidebar">
+        <div class="photo-container">
+          {% if base64_photo %}
+          <img src="{{ base64_photo }}" alt="Profile Photo" class="photo" />
+          {% else %}
+          <div
+            class="photo"
+            style="
+              background: rgba(255, 255, 255, 0.2);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <i class="fas fa-user fa-2x" style="color: white"></i>
+          </div>
+          {% endif %}
+        </div>
+
+        <h1 class="name">{{ resume_data.personal_info.name }}</h1>
+        <p class="title">{{ resume_data.personal_info.email }}</p>
+
+        <div class="contact-info">
+          {% if resume_data.personal_info.phone %}
+          <div class="contact-item">
+            <i class="fas fa-phone"></i> {{ resume_data.personal_info.phone }}
+          </div>
+          {% endif %} {% if resume_data.personal_info.address %}
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i> {{
+            resume_data.personal_info.address }}
+          </div>
+          {% endif %} {% if resume_data.personal_info.linkedin %}
+          <div class="contact-item">
+            <i class="fab fa-linkedin"></i> {{
+            resume_data.personal_info.linkedin }}
+          </div>
+          {% endif %} {% if resume_data.personal_info.website %}
+          <div class="contact-item">
+            <i class="fas fa-globe"></i> {{ resume_data.personal_info.website }}
+          </div>
+          {% endif %}
+        </div>
+
+        {% if resume_data.skills %}
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Skills</h3>
+          <div class="skills">
+            {% for skill in resume_data.skills %}
+            <div class="skill">
+              <div class="skill-name">{{ skill }}</div>
+              <div class="skill-bar">
+                <div
+                  class="skill-level"
+                  style="width: {{ [90, 85, 80, 75, 70][loop.index0 % 5] }}%"
+                ></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %} {% if resume_data.languages %}
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Languages</h3>
+          <div class="languages">
+            {% for language in resume_data.languages %}
+            <div class="language">
+              <div class="language-name">{{ language }}</div>
+              <div class="language-proficiency">
+                <div class="dot filled"></div>
+                <div class="dot filled"></div>
+                <div class="dot filled"></div>
+                <div class="dot filled"></div>
+                <div class="dot"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="main-content">
+        {% if resume_data.summary %}
+        <div class="summary">
+          <p>{{ resume_data.summary }}</p>
+        </div>
+        {% endif %} {% if resume_data.experience %}
+        <div class="main-section">
+          <h2 class="main-title">Work Experience</h2>
+          {% for exp in resume_data.experience %}
+          <div class="experience-item">
+            <div class="item-header">
+              <div class="item-title">{{ exp.position }}</div>
+              <div class="item-date">
+                {{ exp.start_date }} - {% if exp.end_date %}{{ exp.end_date }}{%
+                else %}Present{% endif %}
+              </div>
+            </div>
+            <div class="item-subtitle">{{ exp.company }}</div>
+            {% if exp.description %}
+            <p>{{ exp.description }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %} {% if resume_data.education %}
+        <div class="main-section">
+          <h2 class="main-title">Education</h2>
+          {% for edu in resume_data.education %}
+          <div class="education-item">
+            <div class="item-header">
+              <div class="item-title">{{ edu.degree }}</div>
+              <div class="item-date">
+                {{ edu.start_date }} - {% if edu.end_date %}{{ edu.end_date }}{%
+                else %}Present{% endif %}
+              </div>
+            </div>
+            <div class="item-subtitle">
+              {{ edu.institution }} - {{ edu.field }}
+            </div>
+            {% if edu.description %}
+            <p>{{ edu.description }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ resume.title }} - Resume</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #64748b;
+        --accent: #3b82f6;
+        --light: #f8fafc;
+        --dark: #1e293b;
+        --gray: #94a3b8;
+        --border: #e2e8f0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        line-height: 1.6;
+        color: var(--dark);
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+      }
+
+      .resume-container {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 30px;
+        border-radius: 12px;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 25px;
+        border-bottom: 2px solid var(--primary);
+      }
+
+      .photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 30px;
+        border: 3px solid var(--primary);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .header-info {
+        flex: 1;
+      }
+
+      .name {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--dark);
+        margin: 0 0 5px 0;
+      }
+
+      .title {
+        font-size: 18px;
+        color: var(--primary);
+        margin: 0 0 15px 0;
+        font-weight: 500;
+      }
+
+      .contact-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 14px;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+        color: var(--secondary);
+      }
+
+      .contact-item i {
+        margin-right: 8px;
+        color: var(--primary);
+        width: 16px;
+        text-align: center;
+      }
+
+      .section {
+        margin-bottom: 25px;
+      }
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background-color: var(--primary);
+      }
+
+      .experience-item,
+      .education-item {
+        margin-bottom: 20px;
+        padding-left: 20px;
+        border-left: 2px solid var(--border);
+      }
+
+      .item-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .item-title {
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      .item-date {
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .item-subtitle {
+        color: var(--secondary);
+        margin-bottom: 8px;
+        font-size: 15px;
+      }
+
+      .skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .skill {
+        background-color: var(--light);
+        color: var(--primary-dark);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--border);
+      }
+
+      .alert {
+        background-color: #dbeafe;
+        color: var(--primary-dark);
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+      }
+
+      .alert i {
+        margin-right: 10px;
+        color: var(--primary);
+      }
+
+      .alert-link {
+        color: var(--primary-dark);
+        text-decoration: underline;
+        margin-left: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    {% if is_public_view %}
+    <div class="alert">
+      <i class="fas fa-globe"></i> This is a public view of a resume created
+      with ProfileMint.
+      <a href="{{ url_for('index') }}" class="alert-link"
+        >Create your own resume</a
+      >.
+    </div>
+    {% endif %}
+
+    <div class="resume-container">
+      <div class="header">
+        {% if base64_photo %}
+        <img src="{{ base64_photo }}" alt="Profile Photo" class="photo" />
+        {% else %}
+        <div
+          class="photo"
+          style="
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <i class="fas fa-user fa-2x" style="color: var(--primary)"></i>
+        </div>
+        {% endif %}
+
+        <div class="header-info">
+          <h1 class="name">{{ resume_data.personal_info.name }}</h1>
+          <p class="title">{{ resume_data.personal_info.email }}</p>
+
+          <div class="contact-info">
+            {% if resume_data.personal_info.phone %}
+            <div class="contact-item">
+              <i class="fas fa-phone"></i> {{ resume_data.personal_info.phone }}
+            </div>
+            {% endif %} {% if resume_data.personal_info.address %}
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i> {{
+              resume_data.personal_info.address }}
+            </div>
+            {% endif %} {% if resume_data.personal_info.linkedin %}
+            <div class="contact-item">
+              <i class="fab fa-linkedin"></i> {{
+              resume_data.personal_info.linkedin }}
+            </div>
+            {% endif %} {% if resume_data.personal_info.website %}
+            <div class="contact-item">
+              <i class="fas fa-globe"></i> {{ resume_data.personal_info.website
+              }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% if resume_data.summary %}
+      <div class="section">
+        <h2 class="section-title">Professional Summary</h2>
+        <p>{{ resume_data.summary }}</p>
+      </div>
+      {% endif %} {% if resume_data.experience %}
+      <div class="section">
+        <h2 class="section-title">Work Experience</h2>
+        {% for exp in resume_data.experience %}
+        <div class="experience-item">
+          <div class="item-header">
+            <div class="item-title">{{ exp.position }}</div>
+            <div class="item-date">
+              {{ exp.start_date }} - {% if exp.end_date %}{{ exp.end_date }}{%
+              else %}Present{% endif %}
+            </div>
+          </div>
+          <div class="item-subtitle">{{ exp.company }}</div>
+          {% if exp.description %}
+          <p>{{ exp.description }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% if resume_data.education %}
+      <div class="section">
+        <h2 class="section-title">Education</h2>
+        {% for edu in resume_data.education %}
+        <div class="education-item">
+          <div class="item-header">
+            <div class="item-title">{{ edu.degree }}</div>
+            <div class="item-date">
+              {{ edu.start_date }} - {% if edu.end_date %}{{ edu.end_date }}{%
+              else %}Present{% endif %}
+            </div>
+          </div>
+          <div class="item-subtitle">
+            {{ edu.institution }} - {{ edu.field }}
+          </div>
+          {% if edu.description %}
+          <p>{{ edu.description }}</p>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% if resume_data.skills %}
+      <div class="section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills">
+          {% for skill in resume_data.skills %}
+          <div class="skill">{{ skill }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
